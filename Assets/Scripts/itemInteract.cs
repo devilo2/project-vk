@@ -31,11 +31,6 @@ abstract public class itemInteract : MonoBehaviour
         inArea = true;
     }
 
-    protected void OnTriggerStay2D(Collider2D collision)
-    {
-        
-    }
-
     protected void OnTriggerExit2D(Collider2D collision)
     {
         interactUI.SetActive(false);
