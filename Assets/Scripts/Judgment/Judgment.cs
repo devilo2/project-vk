@@ -13,7 +13,8 @@ public class Judgment : MonoBehaviour
     {
         Pumble,
         Fail,
-        Success
+        Success,
+        Special
     }
 
 
@@ -134,6 +135,10 @@ public class Judgment : MonoBehaviour
         {
             return JudgeResult.Pumble;
         }
+        else if(dice >= 12)
+        {
+            return JudgeResult.Special;
+        }
         else if (dice >= number)
         {
             return JudgeResult.Success;
@@ -154,6 +159,10 @@ public class Judgment : MonoBehaviour
         {
             Debug.Log("실패!!!");
         }
+        else if (result == JudgeResult.Special)
+        {
+            Debug.Log("스페셜!!!");
+        }
         else
         {
             Debug.Log("펌블!!!");
@@ -168,7 +177,7 @@ public class Judgment : MonoBehaviour
         {
             Judge_print("포술");
             Judge_print("비행술");
-            Judge_print("지형점령   ");
+            Judge_print("지형점령");
         }
     }
 }
