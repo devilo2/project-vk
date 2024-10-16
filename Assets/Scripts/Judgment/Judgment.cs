@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using JetBrains.Annotations;
 using Unity.VisualScripting;
-using UnityEditorInternal;
 using UnityEngine;
 
 public class Judgment : MonoBehaviour
@@ -35,9 +36,11 @@ public class Judgment : MonoBehaviour
     };
 
     //모든 스탯을 저장한 배열
-    private ArrayList statuses = new ArrayList();
+    private List<Status> statuses = new List<Status>();
     //가진 스탯
-    private ArrayList havingStatuses = new ArrayList();
+    private List<Status> availableStatuses = new List<Status>();
+    private List<Status> havingStatuses = new List<Status>(); 
+    //활성화 된 스탯
 
 
     // Start is called before the first frame update
@@ -63,12 +66,8 @@ public class Judgment : MonoBehaviour
 
         //테스트 코드
         havingStatuses.Add(SearchStat("포술"));
-
-
-        for (int i = 0; i < havingStatuses.Count; i++)
-        {
-            Debug.Log(((Status)havingStatuses[i]).name);
-        }
+        availableStatuses = havingStatuses.ToList();
+        
     }
 
     //스탯을 이름으로 찾아 반환
@@ -76,7 +75,7 @@ public class Judgment : MonoBehaviour
     {
         for (int i = 0; i < statuses.Count; i++)
         {
-            Status compare = (Status)statuses[i];
+            Status compare = statuses[i];
             if (compare.name == name)
             {
                 return compare;
@@ -93,7 +92,7 @@ public class Judgment : MonoBehaviour
         Status judge_status = SearchStat(name);
 
         //가진 스탯에 있을 경우
-        if (havingStatuses.Contains(judge_status))
+        if (availableStatuses.Contains(judge_status))
         {
             Debug.Log("GetJudgeNum: 5, Having Status");
             return judgeNum;
@@ -101,13 +100,13 @@ public class Judgment : MonoBehaviour
         //없을 경우 판정치 계산
         else
         {
-            Status minDistStatus = (Status)statuses[0];
+            Status minDistStatus = statuses[0];
             int minDist = 999;
 
             //표애서 가장 가까운 스탯의 거리를 구해 기본치에 더한다..
-            for (int i = 0; i < havingStatuses.Count; i++)
+            for (int i = 0; i < availableStatuses.Count; i++)
             {
-                Status cmp = (Status)havingStatuses[i];
+                Status cmp = (Status)availableStatuses[i];
                 int dist = Mathf.Abs(cmp.x - judge_status.x) + Mathf.Abs(cmp.y - judge_status.y);
                 if (dist < minDist)
                 {
@@ -120,8 +119,42 @@ public class Judgment : MonoBehaviour
         }
     }
 
+    //체력 깍인 줄의 스탯 비활성화
+    public void DisableStat(HealthStat stat)
+    {
+        for (int i = availableStatuses.Count-1; i >= 0 ; i--)
+        {
+            if (availableStatuses[i].x == (int)stat)
+            {
+                Debug.Log("삭제:" + availableStatuses[i].name);
+                availableStatuses.RemoveAt(i);
+            }
+        }
+    }
 
+    //스탯 다시 활성화
+    public void ResetStat()
+    {
+        availableStatuses = havingStatuses.ToList();
+    }
 
+    //가진 스탯 출력
+    public void PrintStat()
+    {
+        Debug.Log("전체 스탯:");
+        for(int i=0; i < havingStatuses.Count; i++)
+        {
+            Debug.Log(havingStatuses[i].name);
+        }
+
+        Debug.Log("가능한 스탯");
+        for(int i=0; i<availableStatuses.Count; i++)
+        {
+            Debug.Log(availableStatuses[i].name);
+        }
+    }
+
+    //주사위 굴리기
     int RollDIce()
     {
         return Random.Range(2, 13);        
@@ -170,6 +203,8 @@ public class Judgment : MonoBehaviour
 
     }
 
+    
+
     // Update is called once per frame
     void Update()
     {
@@ -178,6 +213,11 @@ public class Judgment : MonoBehaviour
             Judge_print("포술");
             Judge_print("비행술");
             Judge_print("지형점령");
+        }
+
+        if(Input.GetKeyDown(KeyCode.N))
+        {
+            PrintStat();
         }
     }
 }
