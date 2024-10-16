@@ -17,6 +17,7 @@ public class PlayerData : MonoBehaviour
     private List<object> Lethalmove;
 
 
+    //num의 횟수 만큼 랜덤한 체력을 깍는다.
     void Damaged(int num)
     {
         for (int i = 0; i < num; i++)
@@ -31,8 +32,10 @@ public class PlayerData : MonoBehaviour
             judge.DisableStat(DamagedStat);
         }
     }
-        // Start is called before the first frame update
-        void Start()
+
+    // Start is called before the first frame update
+    //judgement 가져오기
+    void Start()
     {
         judge = judgeObject.GetComponent<Judgment>();
     }

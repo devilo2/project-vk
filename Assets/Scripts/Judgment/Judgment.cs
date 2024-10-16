@@ -66,6 +66,8 @@ public class Judgment : MonoBehaviour
 
         //테스트 코드
         havingStatuses.Add(SearchStat("포술"));
+        havingStatuses.Add(SearchStat("수리검술"));
+        havingStatuses.Add(SearchStat("잠입술"));
         availableStatuses = havingStatuses.ToList();
         
     }
@@ -119,41 +121,6 @@ public class Judgment : MonoBehaviour
         }
     }
 
-    //체력 깍인 줄의 스탯 비활성화
-    public void DisableStat(HealthStat stat)
-    {
-        for (int i = availableStatuses.Count-1; i >= 0 ; i--)
-        {
-            if (availableStatuses[i].x == (int)stat)
-            {
-                Debug.Log("삭제:" + availableStatuses[i].name);
-                availableStatuses.RemoveAt(i);
-            }
-        }
-    }
-
-    //스탯 다시 활성화
-    public void ResetStat()
-    {
-        availableStatuses = havingStatuses.ToList();
-    }
-
-    //가진 스탯 출력
-    public void PrintStat()
-    {
-        Debug.Log("전체 스탯:");
-        for(int i=0; i < havingStatuses.Count; i++)
-        {
-            Debug.Log(havingStatuses[i].name);
-        }
-
-        Debug.Log("가능한 스탯");
-        for(int i=0; i<availableStatuses.Count; i++)
-        {
-            Debug.Log(availableStatuses[i].name);
-        }
-    }
-
     //주사위 굴리기
     int RollDIce()
     {
@@ -203,7 +170,41 @@ public class Judgment : MonoBehaviour
 
     }
 
-    
+    //체력 깍인 줄의 스탯 비활성화
+    public void DisableStat(HealthStat stat)
+    {
+        for (int i = availableStatuses.Count - 1; i >= 0; i--)
+        {
+            if (availableStatuses[i].x == (int)stat)
+            {
+                Debug.Log("삭제:" + availableStatuses[i].name);
+                availableStatuses.RemoveAt(i);
+            }
+        }
+    }
+
+    //스탯 다시 활성화
+    public void ResetStat()
+    {
+        availableStatuses = havingStatuses.ToList();
+    }
+
+    //가진 스탯 출력
+    public void PrintStat()
+    {
+        Debug.Log("전체 스탯:");
+        for (int i = 0; i < havingStatuses.Count; i++)
+        {
+            Debug.Log(havingStatuses[i].name);
+        }
+
+        Debug.Log("가능한 스탯");
+        for (int i = 0; i < availableStatuses.Count; i++)
+        {
+            Debug.Log(availableStatuses[i].name);
+        }
+    }
+
 
     // Update is called once per frame
     void Update()
