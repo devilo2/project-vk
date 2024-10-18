@@ -7,3 +7,8 @@ public enum HealthStat
     Tactics,
     Magic
 }
+
+public enum Skill
+{
+
+}
