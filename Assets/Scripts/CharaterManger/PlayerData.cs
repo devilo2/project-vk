@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 public class PlayerData : MonoBehaviour
@@ -10,11 +11,11 @@ public class PlayerData : MonoBehaviour
     private List<HealthStat> Health = new List<HealthStat>{HealthStat.Tech, HealthStat.Somatic, HealthStat.Medicine, HealthStat.Mosul, HealthStat.Tactics, HealthStat.Magic};
     private List<HealthStat> DamagedHealth = new List<HealthStat>();
 
+    private Species species;
     private List<object> item;
-    private List<object> status;
     private List<object> keyItem;
-    private List<object> skill;
-    private List<object> Lethalmove;
+    private List<CommonSkill> commonSkill;
+    private List<object> speciesSkill;
 
 
     //numÀÇ È½¼ö ¸¸Å­ ·£´ýÇÑ Ã¼·ÂÀ» ±ï´Â´Ù.
