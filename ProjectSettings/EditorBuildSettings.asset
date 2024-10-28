@@ -9,9 +9,12 @@ EditorBuildSettings:
     path: Assets/Scenes/Charater Select.unity
     guid: 59bcc8df2ba5e38428e81524280457da
   - enabled: 1
-    path: Assets/Scenes/Exploration.unity
+    path: Assets/Scenes/exploration.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
     path: Assets/Scenes/Judgment.unity
     guid: 23b5e64478ecea14487a8f32900caf84
+  - enabled: 1
+    path: Assets/Scenes/PlayerDataManager.unity
+    guid: 6650ead7b455aa243b666ab2b36e1185
   m_configObjects: {}
