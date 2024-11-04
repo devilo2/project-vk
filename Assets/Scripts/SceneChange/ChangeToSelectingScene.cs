@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 
-public class PlayerDataToSelectingScene : MonoBehaviour
+public class ChangeToSelectingScene : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
