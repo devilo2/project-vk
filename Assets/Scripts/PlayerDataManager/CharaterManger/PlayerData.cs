@@ -14,9 +14,17 @@ public class PlayerData : MonoBehaviour
     public Species species { get; set; }
     private List<object> item;
     private List<object> keyItem;
-    private List<CommonSkill> commonSkill;
-    private List<object> speciesSkill;
+    private Skill[] skill;
 
+    public int getSkillCount()
+    {
+        return skill.Length;
+    }
+
+    public Skill getSkill(int index)
+    {
+        return (skill[index]);
+    }
 
     //num의 횟수 만큼 랜덤한 체력을 깍는다.
     void Damaged(int num)
@@ -39,6 +47,12 @@ public class PlayerData : MonoBehaviour
     void Start()
     {
         judge = judgeObject.GetComponent<Judgment>();
+
+        //테스트 코드
+        Skill testSkill1 = new Skill("테스트 스킬", 2);
+        Skill testSkill2 = new Skill("테스트 스킬2", 2);
+
+        skill = new Skill[] {testSkill1, testSkill2};
     }
 
     // Update is called once per frame

@@ -10,7 +10,7 @@ public class Judgment : MonoBehaviour
 {
 
     //판정결과
-    private enum JudgeResult
+    public enum JudgeResult
     {
         Pumble,
         Fail,
@@ -147,10 +147,16 @@ public class Judgment : MonoBehaviour
         return JudgeResult.Fail;
     }
 
+
+    public JudgeResult GetJudgeResult(string name)
+    {
+        return Judge(GetJudgeNum(name));
+    }
+
     //판정 테스트
     void Judge_print(string name)
     {
-        JudgeResult result = Judge(GetJudgeNum(name));
+        JudgeResult result = GetJudgeResult(name);
         if (result == JudgeResult.Success)
         {
             Debug.Log("성공!!!!");
