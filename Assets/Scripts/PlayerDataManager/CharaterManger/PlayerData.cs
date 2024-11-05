@@ -50,7 +50,7 @@ public class PlayerData : MonoBehaviour
 
         //테스트 코드
         Skill testSkill1 = new Skill("테스트 스킬", 2);
-        Skill testSkill2 = new Skill("테스트 스킬2", 2);
+        Skill testSkill2 = new Skill("테스트 스킬2", 10);
 
         skill = new Skill[] {testSkill1, testSkill2};
     }

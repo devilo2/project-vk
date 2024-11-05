@@ -2,10 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tool : Item
+public abstract class Tool : Item
 {
-    public void Use()
-    {
-
-    }
+    public abstract void Use();
 }
