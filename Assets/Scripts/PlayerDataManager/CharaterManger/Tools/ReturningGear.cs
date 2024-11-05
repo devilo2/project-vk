@@ -7,6 +7,7 @@ public class ReturningGear : Tool
 {
     public override void Use()
     {
-        throw new System.NotImplementedException();
+        Judgment judgment = GameObject.Find("Judgement Manger").GetComponent<Judgment>();
+        judgment.ReJudge();
     }
 }
