@@ -42,6 +42,21 @@ public class PlayerData : MonoBehaviour
         }
     }
 
+    public void RandomHeal(int num)
+    {
+        for (int i = 0; i < num; i++)
+        {
+            int select = Random.Range(0, DamagedHealth.Count);
+            HealthStat HealStat = DamagedHealth[select];
+            Debug.Log("체력회복:" + HealStat.ToString());
+            DamagedHealth.RemoveAt(select);
+
+            Health.Add(HealStat);
+
+            judge.EnableStat(HealStat);
+        }
+    }
+
     // Start is called before the first frame update
     //judgement 가져오기
     void Start()

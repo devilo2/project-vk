@@ -39,6 +39,7 @@ public class Judgment : MonoBehaviour
     private List<Status> statuses = new List<Status>();
     //가진 스탯
     private List<Status> availableStatuses = new List<Status>();
+    private List<Status> disavaiableStatuses = new List<Status>();
     private List<Status> havingStatuses = new List<Status>(); 
     //활성화 된 스탯
 
@@ -184,7 +185,22 @@ public class Judgment : MonoBehaviour
             if (availableStatuses[i].x == (int)stat)
             {
                 Debug.Log("삭제:" + availableStatuses[i].name);
+                disavaiableStatuses.Add(availableStatuses[i]);
                 availableStatuses.RemoveAt(i);
+            }
+        }
+    }
+
+    //스탯 회복
+    public void EnableStat(HealthStat stat)
+    {
+        for (int i = disavaiableStatuses.Count - 1; i >= 0; i--)
+        {
+            if (disavaiableStatuses[i].x == (int)stat)
+            {
+                Debug.Log("복원:" + disavaiableStatuses[i].name);
+                availableStatuses.Add(disavaiableStatuses[i]);
+                disavaiableStatuses.RemoveAt(i);
             }
         }
     }
