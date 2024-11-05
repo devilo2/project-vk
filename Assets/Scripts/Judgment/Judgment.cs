@@ -37,10 +37,14 @@ public class Judgment : MonoBehaviour
 
     //모든 스탯을 저장한 배열
     private List<Status> statuses = new List<Status>();
-    //가진 스탯
-    private List<Status> availableStatuses = new List<Status>();
-    private List<Status> havingStatuses = new List<Status>(); 
     //활성화 된 스탯
+    private List<Status> availableStatuses = new List<Status>();
+    //비활성화 된 스탯
+    private List<Status> disavaiableStatuses = new List<Status>();
+    //가진 스탯
+    private List<Status> havingStatuses = new List<Status>(); 
+    
+    public string LastJudgeStatName { get; private set; }
 
 
     // Start is called before the first frame update
@@ -150,7 +154,13 @@ public class Judgment : MonoBehaviour
 
     public JudgeResult GetJudgeResult(string name)
     {
+        LastJudgeStatName = name;
         return Judge(GetJudgeNum(name));
+    }
+
+    public JudgeResult ReJudge()
+    {
+        return GetJudgeResult(LastJudgeStatName);
     }
 
     //판정 테스트
@@ -184,7 +194,22 @@ public class Judgment : MonoBehaviour
             if (availableStatuses[i].x == (int)stat)
             {
                 Debug.Log("삭제:" + availableStatuses[i].name);
+                disavaiableStatuses.Add(availableStatuses[i]);
                 availableStatuses.RemoveAt(i);
+            }
+        }
+    }
+
+    //스탯 회복
+    public void EnableStat(HealthStat stat)
+    {
+        for (int i = disavaiableStatuses.Count - 1; i >= 0; i--)
+        {
+            if (disavaiableStatuses[i].x == (int)stat)
+            {
+                Debug.Log("복원:" + disavaiableStatuses[i].name);
+                availableStatuses.Add(disavaiableStatuses[i]);
+                disavaiableStatuses.RemoveAt(i);
             }
         }
     }

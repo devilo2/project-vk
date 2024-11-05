@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 
 //아이템을 표현하는 클래스
-public class Item
+public abstract class Item
 {   
     public string name { get; set; }
     protected Image itemImage;  

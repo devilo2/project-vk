@@ -31,6 +31,9 @@ public class PlayerData : MonoBehaviour
     {
         for (int i = 0; i < num; i++)
         {
+            if (Health.Count <= 0)
+                return;
+
             int select = Random.Range(0, Health.Count);
             HealthStat DamagedStat = Health[select];
             Debug.Log("체력깍임:" + DamagedStat.ToString());
@@ -42,6 +45,26 @@ public class PlayerData : MonoBehaviour
         }
     }
 
+    //num의 횟수 만큼 랜덤한 체력을 회복한다.
+    public void RandomHeal(int num)
+    {
+
+        for (int i = 0; i < num; i++)
+        {
+            if (DamagedHealth.Count <= 0)
+                return;
+
+            int select = Random.Range(0, DamagedHealth.Count);
+            HealthStat HealStat = DamagedHealth[select];
+            Debug.Log("체력회복:" + HealStat.ToString());
+            DamagedHealth.RemoveAt(select);
+
+            Health.Add(HealStat);
+
+            judge.EnableStat(HealStat);
+        }
+    }
+
     // Start is called before the first frame update
     //judgement 가져오기
     void Start()
@@ -50,10 +73,12 @@ public class PlayerData : MonoBehaviour
 
         //테스트 코드
         Skill testSkill1 = new Skill("테스트 스킬", 2);
-        Skill testSkill2 = new Skill("테스트 스킬2", 2);
+        Skill testSkill2 = new Skill("테스트 스킬2", 10);
 
         skill = new Skill[] {testSkill1, testSkill2};
     }
+
+        
 
     // Update is called once per frame
     void Update()
@@ -61,6 +86,11 @@ public class PlayerData : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.M))
         {
             Damaged(1);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Comma))
+        {
+            RandomHeal(1);
         }
     }
 }
