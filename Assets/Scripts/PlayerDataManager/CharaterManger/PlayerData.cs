@@ -55,6 +55,8 @@ public class PlayerData : MonoBehaviour
         skill = new Skill[] {testSkill1, testSkill2};
     }
 
+        
+
     // Update is called once per frame
     void Update()
     {

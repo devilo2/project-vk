@@ -17,14 +17,8 @@ public class Skill
         Cost = cost;
     }
 
-    void Start()
+    public virtual void UseSkill(Enemy enemy)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Debug.Log($"Skill: {Name} »ç¿ë");
     }
 }
