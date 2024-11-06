@@ -8,6 +8,8 @@ using UnityEngine;
 
 public class Judgment : MonoBehaviour
 {
+    public const int STATUS_X_MAX = 6;
+    public const int STATUS_Y_MAX = 11;
 
     //판정결과
     public enum JudgeResult
@@ -21,7 +23,7 @@ public class Judgment : MonoBehaviour
 
 
     //스텟이름과 표상에서의 위치를 표현하는 구조체
-    private struct Status
+    public struct Status
     {
         public string name;
         public int x;
@@ -69,15 +71,21 @@ public class Judgment : MonoBehaviour
 
 
         //테스트 코드
-        havingStatuses.Add(SearchStat("포술"));
-        havingStatuses.Add(SearchStat("수리검술"));
-        havingStatuses.Add(SearchStat("잠입술"));
+        havingStatuses.Add(SearchStatByName("포술"));
+        havingStatuses.Add(SearchStatByName("수리검술"));
+        havingStatuses.Add(SearchStatByName("잠입술"));
         availableStatuses = havingStatuses.ToList();
         
     }
 
+    public void AddStat(int x, int y)
+    { 
+        Status stat = GetStatus(x, y);
+        havingStatuses.Add(stat);
+    }
+
     //스탯을 이름으로 찾아 반환
-    Status SearchStat(string name)
+    public Status SearchStatByName(string name)
     {
         for (int i = 0; i < statuses.Count; i++)
         {
@@ -91,11 +99,40 @@ public class Judgment : MonoBehaviour
         return new Status("null", 0, 0);
     }
 
+    public Status GetStatus(int x, int y)
+    {
+        for(int i = 0; i < statuses.Count; i++)
+        {
+            Status stat = statuses[i];
+            if(stat.x == x && stat.y == y)
+            {
+                return stat;
+            }
+        }
+
+        return new Status("null", 0, 0);
+    }
+
+    public string GetStatusName(int x, int y)
+    {
+        for (int i = 0; i < statuses.Count; i++)
+        {
+            Status stat = statuses[i];
+            if (stat.x == x && stat.y == y)
+            {
+                return stat.name;
+            }
+        }
+
+        return "null";
+    }
+
+
     //판정치 계산, name: 판정할 스탯 이름
     int GetJudgeNum(string name)
     {
         int judgeNum = 5;
-        Status judge_status = SearchStat(name);
+        Status judge_status = SearchStatByName(name);
 
         //가진 스탯에 있을 경우
         if (availableStatuses.Contains(judge_status))
