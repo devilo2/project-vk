@@ -98,7 +98,7 @@ public class Judgment : MonoBehaviour
        
         return new Status("null", 0, 0);
     }
-
+    // x, y ÁÂÇ¥·Î ½ºÅÈ Ã£±â
     public Status GetStatus(int x, int y)
     {
         for(int i = 0; i < statuses.Count; i++)

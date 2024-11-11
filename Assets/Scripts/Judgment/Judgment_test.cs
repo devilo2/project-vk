@@ -43,11 +43,14 @@ public class Judgment_test : MonoBehaviour
         }
     };
 
-    // 모든 스탯을 저장한 배열
+    //모든 스탯을 저장한 배열
     private List<Status> statuses = new List<Status>();
-    private List<Status> availableStatuses = new List<Status>(); // 활성화된 스탯
-    private List<Status> disavaiableStatuses = new List<Status>(); // 비활성화된 스탯
-    private List<Status> havingStatuses = new List<Status>(); // 가지고 있는 스탯
+    //활성화 된 스탯
+    private List<Status> availableStatuses = new List<Status>();
+    //비활성화 된 스탯
+    private List<Status> disavaiableStatuses = new List<Status>();
+    //가진 스탯
+    private List<Status> havingStatuses = new List<Status>();
 
     public string LastJudgeStatName { get; private set; }
 
@@ -85,49 +88,79 @@ public class Judgment_test : MonoBehaviour
     }
 
 
-    // 스탯 추가 메서드
     public void AddStat(int x, int y)
     {
         Status stat = GetStatus(x, y);
         havingStatuses.Add(stat);
     }
 
-    // 스탯을 이름으로 찾는 메서드
+    //스탯을 이름으로 찾아 반환
     public Status SearchStatByName(string name)
     {
-        foreach (var status in statuses)
+        for (int i = 0; i < statuses.Count; i++)
         {
-            if (status.name == name)
-                return status;
+            Status compare = statuses[i];
+            if (compare.name == name)
+            {
+                return compare;
+            }
         }
+
         return new Status("null", 0, 0);
     }
-
     // x, y 좌표로 스탯 찾기
     public Status GetStatus(int x, int y)
     {
-        return statuses.FirstOrDefault(stat => stat.x == x && stat.y == y);
+        for (int i = 0; i < statuses.Count; i++)
+        {
+            Status stat = statuses[i];
+            if (stat.x == x && stat.y == y)
+            {
+                return stat;
+            }
+        }
+
+        return new Status("null", 0, 0);
     }
 
-    // 이름으로 스탯을 찾고 판정치를 반환
+    public string GetStatusName(int x, int y)
+    {
+        for (int i = 0; i < statuses.Count; i++)
+        {
+            Status stat = statuses[i];
+            if (stat.x == x && stat.y == y)
+            {
+                return stat.name;
+            }
+        }
+
+        return "null";
+    }
+
+
+    //판정치 계산, name: 판정할 스탯 이름
     int GetJudgeNum(string name)
     {
         int judgeNum = 5;
-        Status judgeStatus = SearchStatByName(name);
+        Status judge_status = SearchStatByName(name);
 
-        if (availableStatuses.Contains(judgeStatus))
+        //가진 스탯에 있을 경우
+        if (availableStatuses.Contains(judge_status))
         {
             Debug.Log("GetJudgeNum: 5, Having Status");
             return judgeNum;
         }
+        //없을 경우 판정치 계산
         else
         {
             Status minDistStatus = statuses[0];
             int minDist = 999;
 
-            foreach (var cmp in availableStatuses)
+            //표애서 가장 가까운 스탯의 거리를 구해 기본치에 더한다..
+            for (int i = 0; i < availableStatuses.Count; i++)
             {
-                int dist = Mathf.Abs(cmp.x - judgeStatus.x) + Mathf.Abs(cmp.y - judgeStatus.y);
+                Status cmp = (Status)availableStatuses[i];
+                int dist = Mathf.Abs(cmp.x - judge_status.x) + Mathf.Abs(cmp.y - judge_status.y);
                 if (dist < minDist)
                 {
                     minDist = dist;
@@ -263,14 +296,27 @@ public class Judgment_test : MonoBehaviour
         }
     }
 
+    public void ResetStat()
+    {
+        availableStatuses = havingStatuses.ToList();
+    }
+
+
     // 전체 스탯 출력
+    //가진 스탯 출력
     public void PrintStat()
     {
         Debug.Log("전체 스탯:");
-        havingStatuses.ForEach(stat => Debug.Log(stat.name));
+        for (int i = 0; i < havingStatuses.Count; i++)
+        {
+            Debug.Log(havingStatuses[i].name);
+        }
 
-        Debug.Log("가능한 스탯:");
-        availableStatuses.ForEach(stat => Debug.Log(stat.name));
+        Debug.Log("가능한 스탯");
+        for (int i = 0; i < availableStatuses.Count; i++)
+        {
+            Debug.Log(availableStatuses[i].name);
+        }
     }
 
     // Update 메서드
