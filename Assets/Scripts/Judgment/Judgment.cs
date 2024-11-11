@@ -71,8 +71,8 @@ public class Judgment : MonoBehaviour
 
 
         //테스트 코드
-        havingStatuses.Add(SearchStatByName("포술"));
-        havingStatuses.Add(SearchStatByName("수리검술"));
+        havingStatuses.Add(SearchStatByName("사격"));
+        havingStatuses.Add(SearchStatByName("운전"));
         havingStatuses.Add(SearchStatByName("잠입술"));
         availableStatuses = havingStatuses.ToList();
         
@@ -279,9 +279,9 @@ public class Judgment : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.B))
         {
-            Judge_print("포술");
-            Judge_print("비행술");
-            Judge_print("지형점령");
+            Judge_print("사격");
+            Judge_print("비행기조종");
+            Judge_print("지형활용");
         }
 
         if(Input.GetKeyDown(KeyCode.N))
