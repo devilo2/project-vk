@@ -184,10 +184,8 @@ public class Judgment_test : MonoBehaviour
     {
         if (!isRolling)
         {
-            StartCoroutine(RollTheDice());
             isRolling = true;
-            while (isRolling) { }
-            Judge("사격");
+            StartCoroutine(RollTheDice());
         }
     }
 
@@ -211,6 +209,7 @@ public class Judgment_test : MonoBehaviour
         resultText.text = "주사위 합: " + dice.ToString();
 
         isRolling = false;
+        Judge("사격");    
     }
 
     // UI 버튼을 클릭 시 호출할 메서드
