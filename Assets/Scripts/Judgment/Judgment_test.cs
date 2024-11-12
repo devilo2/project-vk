@@ -59,7 +59,8 @@ public class Judgment_test : MonoBehaviour
     public string LastJudgeStatName { get; private set; }
 
     // UI 출력 필드
-    [SerializeField] Text resultText; // 판정 결과 UI 출력 필드
+    [SerializeField] Text resultText; // 판정 결과값 UI 출력 필드
+    [SerializeField] Text judgmentText; // 판정 (성공 등등) UI 출력
 
     // Start 메서드
     void Start()
@@ -234,27 +235,26 @@ public class Judgment_test : MonoBehaviour
         LastJudgeStatName = name;
         GetJudgeNum(name); //judgment_value 값 결정
 
-        Debug.Log("Judge: " + dice.ToString());
         if (dice <= 2)
         {
-            Debug.Log("Judge: 펌블!!!");
+            judgmentText.text = "펌블!!!";
             judgeResult = JudgeResult.Pumble;
             return;
         }
         else if (dice >= 12)
         {
-            Debug.Log("Judge: 스페셜!!!");
+            judgmentText.text = "스페셜!!!";
             judgeResult = JudgeResult.Special;
             return;
         }
         else if (dice >= judgment_value)
         {
-            Debug.Log("Judge: 성공!!!!");
+            judgmentText.text = "성공!!!!";
             judgeResult = JudgeResult.Success;
             return;
         }
 
-        Debug.Log("Judge: 실패!!!");
+        judgmentText.text = "실패!!!";
         judgeResult = JudgeResult.Fail;
         return;
     }
