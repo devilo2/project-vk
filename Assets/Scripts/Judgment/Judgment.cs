@@ -189,12 +189,14 @@ public class Judgment : MonoBehaviour
     }
 
 
+    //
     public JudgeResult GetJudgeResult(string name)
     {
         LastJudgeStatName = name;
         return Judge(GetJudgeNum(name));
     }
 
+    //¿Á∆«¡§
     public JudgeResult ReJudge()
     {
         return GetJudgeResult(LastJudgeStatName);

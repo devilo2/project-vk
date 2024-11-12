@@ -15,9 +15,13 @@ public class Judgment_test : MonoBehaviour
     [SerializeField] Image diceImage2; // 두 번쨰 주사위 이미지 UI
     private bool isRolling = false; // 주사위가 굴러가는 중인지 여부
 
-    public const int STATUS_X_MAX = 6;
-    public const int STATUS_Y_MAX = 9;
-    public int dice = 0;
+    public const int STATUS_X_MAX = 6; //스탯X크기
+    public const int STATUS_Y_MAX = 9; //스탯Y크기
+    private int dice = 0; //현재 주사위값
+    private int judgment_value; //판정기준치
+    private JudgeResult judgeResult; //판정 결과
+
+    public JudgeResult result { get { return judgeResult; } } //판정 결과값을 외부에 전달
 
     // 판정 결과 열거형
     public enum JudgeResult
@@ -88,6 +92,7 @@ public class Judgment_test : MonoBehaviour
     }
 
 
+    //가진 스탯에 해당 좌표의 스탯 추가
     public void AddStat(int x, int y)
     {
         Status stat = GetStatus(x, y);
@@ -123,6 +128,7 @@ public class Judgment_test : MonoBehaviour
         return new Status("null", 0, 0);
     }
 
+    // x, y 좌표로 스탯을 찾아 이름 반환
     public string GetStatusName(int x, int y)
     {
         for (int i = 0; i < statuses.Count; i++)
@@ -138,8 +144,8 @@ public class Judgment_test : MonoBehaviour
     }
 
 
-    //판정치 계산, name: 판정할 스탯 이름
-    int GetJudgeNum(string name)
+    //판정치 계산, name: 판정할 스탯 이름 judgement_value에 저장
+    void GetJudgeNum(string name)
     {
         int judgeNum = 5;
         Status judge_status = SearchStatByName(name);
@@ -148,7 +154,8 @@ public class Judgment_test : MonoBehaviour
         if (availableStatuses.Contains(judge_status))
         {
             Debug.Log("GetJudgeNum: 5, Having Status");
-            return judgeNum;
+            judgment_value = judgeNum;
+            return;
         }
         //없을 경우 판정치 계산
         else
@@ -168,7 +175,8 @@ public class Judgment_test : MonoBehaviour
             }
 
             Debug.Log(string.Format("GetJudgeNum: +{0} not Having Status", minDist));
-            return judgeNum + minDist;
+
+            judgment_value = judgeNum + minDist;
         }
     }
 
@@ -176,13 +184,16 @@ public class Judgment_test : MonoBehaviour
     // 주사위 굴리기 메서드 (두 개의 주사위)
     public void RollDice()
     {
-        if (!isRolling) StartCoroutine(RollTheDice());
+        if (!isRolling)
+        {
+            isRolling = true;
+            StartCoroutine(RollTheDice());
+        }
     }
-    
 
+    //화면에 주사위가 굴러가는 이펙트를 표시한다.
     private IEnumerator RollTheDice()
-    {
-        isRolling = true;
+    {   
         int randomDiceSide1 = 0;
         int randomDiceSide2 = 0;
 
@@ -196,78 +207,57 @@ public class Judgment_test : MonoBehaviour
             yield return new WaitForSeconds(0.06f);
         }
 
-        isRolling = false;
-
         // 두 주사위 값 합산하여 결과 처리
         dice = randomDiceSide1 + randomDiceSide2 + 2; // +2는 주사위 값이 1부터 시작하므로 보정
         resultText.text = "주사위 합: " + dice.ToString();
 
+        isRolling = false;
+        Judge("사격");    
     }
 
     // UI 버튼을 클릭 시 호출할 메서드
     public void OnRollDiceButtonClicked()
     {
         RollDice(); // 주사위 굴리기 메서드를 호출
-        Judge_print("사격");
-    }
-
-
-    // 판정치를 바탕으로 판정 결과 반환
-    JudgeResult Judge(int number)
-    {
-        if (dice <= 2)
-        {
-            return JudgeResult.Pumble;
-        }
-        else if (dice >= 12)
-        {
-            return JudgeResult.Special;
-        }
-        else if (dice >= number)
-        {
-            return JudgeResult.Success;
-        }
-
-        return JudgeResult.Fail;
-    }
-
-
-    // 특정 스탯에 대해 판정 결과를 반환
-    public JudgeResult GetJudgeResult(string name)
-    {
-        LastJudgeStatName = name;
-        return Judge(GetJudgeNum(name));
     }
 
     // 이전 스탯에 대해 다시 판정
-    public JudgeResult ReJudge()
+    public void ReJudge()
     {
-        return GetJudgeResult(LastJudgeStatName);
+        RollDice();
     }
 
-    // 판정 테스트
-    void Judge_print(string name)
+
+    // 특정 스탯에 대해 판정 결과를 출력하고 결과를 judgeResult에 저장
+    void Judge(string name)
     {
-        JudgeResult result = GetJudgeResult(name);
-        if (result == JudgeResult.Success)
+        LastJudgeStatName = name;
+        GetJudgeNum(name); //judgment_value 값 결정
+
+        Debug.Log("Judge: " + dice.ToString());
+        if (dice <= 2)
         {
-            Debug.Log("성공!!!!");
+            Debug.Log("Judge: 펌블!!!");
+            judgeResult = JudgeResult.Pumble;
+            return;
         }
-        else if (result == JudgeResult.Fail)
+        else if (dice >= 12)
         {
-            Debug.Log("실패!!!");
+            Debug.Log("Judge: 스페셜!!!");
+            judgeResult = JudgeResult.Special;
+            return;
         }
-        else if (result == JudgeResult.Special)
+        else if (dice >= judgment_value)
         {
-            Debug.Log("스페셜!!!");
-        }
-        else
-        {
-            Debug.Log("펌블!!!");
+            Debug.Log("Judge: 성공!!!!");
+            judgeResult = JudgeResult.Success;
+            return;
         }
 
+        Debug.Log("Judge: 실패!!!");
+        judgeResult = JudgeResult.Fail;
+        return;
     }
-
 
     //체력 깍인 줄의 스탯 비활성화
     public void DisableStat(HealthStat stat)
@@ -296,6 +286,7 @@ public class Judgment_test : MonoBehaviour
         }
     }
 
+    //활성화된 스탯을 가진 스탯으로 초기화 한다.
     public void ResetStat()
     {
         availableStatuses = havingStatuses.ToList();
@@ -324,9 +315,9 @@ public class Judgment_test : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.B))
         {
-            Judge_print("사격");
-            Judge_print("비행기조종");
-            Judge_print("지형활용");
+            Judge("사격");
+            Judge("비행기조종");
+            Judge("지형활용");
         }
 
         if (Input.GetKeyDown(KeyCode.N))
