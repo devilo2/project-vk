@@ -92,6 +92,7 @@ public class Judgment_test : MonoBehaviour
     }
 
 
+    //가진 스탯에 해당 좌표의 스탯 추가
     public void AddStat(int x, int y)
     {
         Status stat = GetStatus(x, y);
@@ -127,6 +128,7 @@ public class Judgment_test : MonoBehaviour
         return new Status("null", 0, 0);
     }
 
+    // x, y 좌표로 스탯을 찾아 이름 반환
     public string GetStatusName(int x, int y)
     {
         for (int i = 0; i < statuses.Count; i++)
@@ -189,6 +191,7 @@ public class Judgment_test : MonoBehaviour
         }
     }
 
+    //화면에 주사위가 굴러가는 이펙트를 표시한다.
     private IEnumerator RollTheDice()
     {   
         int randomDiceSide1 = 0;
@@ -218,8 +221,6 @@ public class Judgment_test : MonoBehaviour
         RollDice(); // 주사위 굴리기 메서드를 호출
     }
 
-    
-
     // 이전 스탯에 대해 다시 판정
     public void ReJudge()
     {
@@ -231,7 +232,7 @@ public class Judgment_test : MonoBehaviour
     void Judge(string name)
     {
         LastJudgeStatName = name;
-        GetJudgeNum(name);
+        GetJudgeNum(name); //judgment_value 값 결정
 
         Debug.Log("Judge: " + dice.ToString());
         if (dice <= 2)
@@ -285,6 +286,7 @@ public class Judgment_test : MonoBehaviour
         }
     }
 
+    //활성화된 스탯을 가진 스탯으로 초기화 한다.
     public void ResetStat()
     {
         availableStatuses = havingStatuses.ToList();
