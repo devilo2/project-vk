@@ -201,20 +201,21 @@ public class Judgment_test : MonoBehaviour
         // 두 주사위 값 합산하여 결과 처리
         dice = randomDiceSide1 + randomDiceSide2 + 2; // +2는 주사위 값이 1부터 시작하므로 보정
         resultText.text = "주사위 합: " + dice.ToString();
-
+            
+        Judge_print("사격");
     }
 
     // UI 버튼을 클릭 시 호출할 메서드
     public void OnRollDiceButtonClicked()
     {
         RollDice(); // 주사위 굴리기 메서드를 호출
-        Judge_print("사격");
     }
 
 
     // 판정치를 바탕으로 판정 결과 반환
     JudgeResult Judge(int number)
     {
+        Debug.Log("Judge: " + dice.ToString());
         if (dice <= 2)
         {
             return JudgeResult.Pumble;
