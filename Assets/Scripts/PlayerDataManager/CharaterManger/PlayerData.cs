@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.Intrinsics;
+using UnityEditor.Build;
 using UnityEngine;
 
 public class PlayerData : MonoBehaviour
@@ -12,9 +13,13 @@ public class PlayerData : MonoBehaviour
     private List<HealthStat> DamagedHealth = new List<HealthStat>();
 
     public Species species { get; set; }
-    private List<object> item;
-    private List<object> keyItem;
+    private Item[] items;
+    private List<object> keyItems;
     private Skill[] skill;
+    public int getItemCount(int index)
+    {
+        return items[index].ItemCount;
+    }
 
     public int getSkillCount()
     {
