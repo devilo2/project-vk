@@ -12,7 +12,8 @@ public abstract class Item
     protected Image itemImage;  
     protected int positionx; //인벤토리에서의 위치
     protected int positiony;
-
+    protected int itemCount;
+    public int ItemCount {  get; set; }
     public Item()
     {
         name = string.Empty;
