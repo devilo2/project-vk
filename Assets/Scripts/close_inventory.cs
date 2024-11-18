@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class load_option : MonoBehaviour
+public class close_inventory : MonoBehaviour
 {
-    public void SceneChange(){
-        SceneManager.LoadScene("Option", LoadSceneMode.Additive);
+    public void close_inven(){
+        SceneManager.UnloadSceneAsync("Inventory");
     }
     // Start is called before the first frame update
     void Start()

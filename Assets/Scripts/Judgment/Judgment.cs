@@ -9,7 +9,7 @@ using UnityEngine;
 public class Judgment : MonoBehaviour
 {
 
-    //ÆÇÁ¤°á°ú
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     private enum JudgeResult
     {
         Pumble,
@@ -20,7 +20,7 @@ public class Judgment : MonoBehaviour
 
 
 
-    //½ºÅÝÀÌ¸§°ú Ç¥»ó¿¡¼­ÀÇ À§Ä¡¸¦ Ç¥ÇöÇÏ´Â ±¸Á¶Ã¼
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½ï¿½ï¿½ Ç¥ï¿½ó¿¡¼ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ Ç¥ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½Ã¼
     private struct Status
     {
         public string name;
@@ -35,18 +35,18 @@ public class Judgment : MonoBehaviour
         }
     };
 
-    //¸ðµç ½ºÅÈÀ» ÀúÀåÇÑ ¹è¿­
+    //ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­
     private List<Status> statuses = new List<Status>();
-    //°¡Áø ½ºÅÈ
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     private List<Status> availableStatuses = new List<Status>();
     private List<Status> havingStatuses = new List<Status>(); 
-    //È°¼ºÈ­ µÈ ½ºÅÈ
+    //È°ï¿½ï¿½È­ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 
     // Start is called before the first frame update
     void Start()
     {
-        //½ºÅÈ¸í, À§Ä¡°¡ ÀûÈù ÆÄÀÏ¿¡¼­ ÀÐ¾îµé¿© ¸®½ºÆ®¿¡ ÀúÀå
+        //ï¿½ï¿½ï¿½È¸ï¿½, ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¿ï¿½ï¿½ï¿½ ï¿½Ð¾ï¿½é¿© ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         StreamReader sr = new StreamReader("Assets/Scripts/Judgment/stats.txt");
         while (sr.Peek() >= 0)
         {
@@ -64,15 +64,15 @@ public class Judgment : MonoBehaviour
         sr.Close();
 
 
-        //Å×½ºÆ® ÄÚµå
-        havingStatuses.Add(SearchStat("Æ÷¼ú"));
-        havingStatuses.Add(SearchStat("¼ö¸®°Ë¼ú"));
-        havingStatuses.Add(SearchStat("ÀáÀÔ¼ú"));
+        //ï¿½×½ï¿½Æ® ï¿½Úµï¿½
+        havingStatuses.Add(SearchStat("ï¿½ï¿½ï¿½ï¿½"));
+        havingStatuses.Add(SearchStat("ï¿½ï¿½ï¿½ï¿½ï¿½Ë¼ï¿½"));
+        havingStatuses.Add(SearchStat("ï¿½ï¿½ï¿½Ô¼ï¿½"));
         availableStatuses = havingStatuses.ToList();
         
     }
 
-    //½ºÅÈÀ» ÀÌ¸§À¸·Î Ã£¾Æ ¹ÝÈ¯
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½È¯
     Status SearchStat(string name)
     {
         for (int i = 0; i < statuses.Count; i++)
@@ -87,25 +87,25 @@ public class Judgment : MonoBehaviour
         return new Status("null", 0, 0);
     }
 
-    //ÆÇÁ¤Ä¡ °è»ê, name: ÆÇÁ¤ÇÒ ½ºÅÈ ÀÌ¸§
+    //ï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½, name: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½
     int GetJudgeNum(string name)
     {
         int judgeNum = 5;
         Status judge_status = SearchStat(name);
 
-        //°¡Áø ½ºÅÈ¿¡ ÀÖÀ» °æ¿ì
+        //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½È¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         if (availableStatuses.Contains(judge_status))
         {
             Debug.Log("GetJudgeNum: 5, Having Status");
             return judgeNum;
         }
-        //¾øÀ» °æ¿ì ÆÇÁ¤Ä¡ °è»ê
+        //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½
         else
         {
             Status minDistStatus = statuses[0];
             int minDist = 999;
 
-            //Ç¥¾Ö¼­ °¡Àå °¡±î¿î ½ºÅÈÀÇ °Å¸®¸¦ ±¸ÇØ ±âº»Ä¡¿¡ ´õÇÑ´Ù..
+            //Ç¥ï¿½Ö¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½âº»Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½Ñ´ï¿½..
             for (int i = 0; i < availableStatuses.Count; i++)
             {
                 Status cmp = (Status)availableStatuses[i];
@@ -121,13 +121,13 @@ public class Judgment : MonoBehaviour
         }
     }
 
-    //ÁÖ»çÀ§ ±¼¸®±â
+    //ï¿½Ö»ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     int RollDIce()
     {
         return Random.Range(2, 13);        
     }
 
-    //ÆÇÁ¤Ä¡ °áÁ¤
+    //ï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
     JudgeResult Judge(int number)
     {
         int dice = RollDIce();
@@ -147,58 +147,58 @@ public class Judgment : MonoBehaviour
         return JudgeResult.Fail;
     }
 
-    //ÆÇÁ¤ Å×½ºÆ®
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ®
     void Judge_print(string name)
     {
         JudgeResult result = Judge(GetJudgeNum(name));
         if (result == JudgeResult.Success)
         {
-            Debug.Log("¼º°ø!!!!");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½!!!!");
         }
         else if (result == JudgeResult.Fail)
         {
-            Debug.Log("½ÇÆÐ!!!");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½!!!");
         }
         else if (result == JudgeResult.Special)
         {
-            Debug.Log("½ºÆä¼È!!!");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½!!!");
         }
         else
         {
-            Debug.Log("Æßºí!!!");
+            Debug.Log("ï¿½ßºï¿½!!!");
         }
 
     }
 
-    //Ã¼·Â ±ïÀÎ ÁÙÀÇ ½ºÅÈ ºñÈ°¼ºÈ­
+    //Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­
     public void DisableStat(HealthStat stat)
     {
         for (int i = availableStatuses.Count - 1; i >= 0; i--)
         {
             if (availableStatuses[i].x == (int)stat)
             {
-                Debug.Log("»èÁ¦:" + availableStatuses[i].name);
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½:" + availableStatuses[i].name);
                 availableStatuses.RemoveAt(i);
             }
         }
     }
 
-    //½ºÅÈ ´Ù½Ã È°¼ºÈ­
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ È°ï¿½ï¿½È­
     public void ResetStat()
     {
         availableStatuses = havingStatuses.ToList();
     }
 
-    //°¡Áø ½ºÅÈ Ãâ·Â
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
     public void PrintStat()
     {
-        Debug.Log("ÀüÃ¼ ½ºÅÈ:");
+        Debug.Log("ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½:");
         for (int i = 0; i < havingStatuses.Count; i++)
         {
             Debug.Log(havingStatuses[i].name);
         }
 
-        Debug.Log("°¡´ÉÇÑ ½ºÅÈ");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
         for (int i = 0; i < availableStatuses.Count; i++)
         {
             Debug.Log(availableStatuses[i].name);
@@ -211,9 +211,9 @@ public class Judgment : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.B))
         {
-            Judge_print("Æ÷¼ú");
-            Judge_print("ºñÇà¼ú");
-            Judge_print("ÁöÇüÁ¡·É");
+            Judge_print("ï¿½ï¿½ï¿½ï¿½");
+            Judge_print("ï¿½ï¿½ï¿½ï¿½ï¿½");
+            Judge_print("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
         }
 
         if(Input.GetKeyDown(KeyCode.N))

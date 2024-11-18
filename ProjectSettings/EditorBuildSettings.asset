@@ -17,4 +17,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/PlayerDataManager.unity
     guid: 6650ead7b455aa243b666ab2b36e1185
+  - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: fd73edacc802d2d41abbdf24fe868bd6
+  - enabled: 1
+    path: Assets/Scenes/Inventory.unity
+    guid: 8b679f2d3296a7248a38f01654626cef
   m_configObjects: {}
