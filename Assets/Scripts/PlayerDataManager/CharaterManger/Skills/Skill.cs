@@ -19,6 +19,6 @@ public class Skill
 
     public virtual void UseSkill(Enemy enemy)
     {
-        Debug.Log($"Skill: {enemy.Name} 에게 {Name} 사용");
+        Debug.Log($"Skill: {Name} 사용");
     }
 }
