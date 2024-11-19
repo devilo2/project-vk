@@ -42,6 +42,7 @@ public class BodyDice : MonoBehaviour
         {
             isRolling = true;
             StartCoroutine(RollTheDice()); // 주사위 굴리기 코루틴 호출
+            dice = 0;
         }
     }
 

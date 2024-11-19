@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class itemInteract1 : MonoBehaviour
 {
@@ -17,10 +18,10 @@ public class itemInteract1 : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F) && inArea)
         {
+            
             Debug.Log(gameObject.name + " interacted!");
 
             StartCoroutine(Blink());
-
         }
     }
 
