@@ -61,15 +61,15 @@ public class BattleManager : MonoBehaviour
         playerData = GameObject.Find("PlayerManager").GetComponent<PlayerData>();
         curBattleStatus = BattleStatus.PlotSelect;
 
-        //�׽�Ʈ �ڵ�
-        Enemy test_enemy = new Enemy("�׽�Ʈ ��");
+        //테스트 코드
+        Enemy test_enemy = new Enemy("테스트 적");
         enemies[0] = test_enemy;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Ű�� ���������� �νĵǹǷ� if������ Ű ������ false�� �ٲ��ش�.
+        //키가 연속적으로 인식되므로 if문에서 키 입력을 false로 바꿔준다.
         enterKey = Input.GetKeyDown(KeyCode.Return); 
         escKey = Input.GetKeyDown(KeyCode.Escape);
 
@@ -81,8 +81,8 @@ public class BattleManager : MonoBehaviour
                     curBattleStatus = BattleStatus.PlayerTurn;
                     skillNum = 0;
                     curPlayerTurnStatus = PlayerTurnStatus.Idle;
-                    Debug.Log($"BattleManager: ���� �÷�:{playerPlot}");
-                    Debug.Log("�÷��̾���");
+                    Debug.Log($"BattleManager: 현재 플롯:{playerPlot}");
+                    Debug.Log("플레이어턴");
                     enterKey = false;
                 }
                 break;
@@ -90,14 +90,14 @@ public class BattleManager : MonoBehaviour
                 if (curPlayerTurnStatus == PlayerTurnStatus.End)
                 {
                     curBattleStatus = BattleStatus.EnemyTurn;
-                    Debug.Log("����");
+                    Debug.Log("적턴");
                 }
                 break;
             case BattleStatus.EnemyTurn:
                 if(curEnemyturnStatus == EnemyTurnStatus.End)
                 {
                     curBattleStatus = BattleStatus.PlayerTurn;
-                    Debug.Log("�÷��̾���");
+                    Debug.Log("플레이어턴");
                 }
                 break;
         }
@@ -142,7 +142,7 @@ public class BattleManager : MonoBehaviour
                 if (enterKey)
                 {
                     curPlayerTurnStatus = PlayerTurnStatus.EnemySelect;
-                    Debug.Log("EnemySelect�� �̵�");
+                    Debug.Log("EnemySelect로 이동");
                     enterKey = false;
                 }
 
@@ -152,7 +152,7 @@ public class BattleManager : MonoBehaviour
                 if (escKey)
                 {
                     curPlayerTurnStatus = PlayerTurnStatus.Idle;
-                    Debug.Log("Idle�� �̵�");
+                    Debug.Log("Idle로 이동");
                     escKey = false;
                 }
                 if (enterKey)
@@ -160,10 +160,10 @@ public class BattleManager : MonoBehaviour
                     if (IsSkillCostUnderPlot())
                     {
                         curPlayerTurnStatus = PlayerTurnStatus.SkillUse;
-                        Debug.Log("SkillUse�� �̵�");
+                        Debug.Log("SkillUse로 이동");
                     }
                     else
-                        Debug.Log("BattleManager: �ڽ�Ʈ ����");
+                        Debug.Log("BattleManager: 코스트 부족");
                     enterKey = false;
                 }
                 break;
@@ -215,7 +215,7 @@ public class BattleManager : MonoBehaviour
 
 
 
-    //��ų�� �ڽ�Ʈ �������� üũ
+    //스킬의 코스트 체크하는 함수
     private Boolean IsSkillCostUnderPlot()
     {
         int maxCost = playerPlot;
