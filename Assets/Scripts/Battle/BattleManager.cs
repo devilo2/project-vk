@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
+using UnityEditor;
 using UnityEngine;
 
 public class BattleManager : MonoBehaviour
@@ -14,15 +15,28 @@ public class BattleManager : MonoBehaviour
     PlayerTurnStatus curPlayerTurnStatus = PlayerTurnStatus.Idle;
 
     int skillNum = 0;
+    int toolNum = 0;
 
-    Enemy[] enemies; 
-    int enemyNum = 0;
-    int enemyMax = 0;
+    ToolOrSkill curToolOrSkill = ToolOrSkill.Tool;
+
+    const int enemyMax = 3;
+
+    Enemy[] enemies = new Enemy[enemyMax]; 
+    int SelectedEnemyNum = 0;
 
     Boolean energyAmplification = false;
     public void EnableEnergyAmplification()
     {
         energyAmplification = true; 
+    }
+
+    bool enterKey = false;
+    bool escKey = false;
+
+    enum ToolOrSkill
+    {
+        Tool,
+        Skill
     }
 
     enum BattleStatus
@@ -37,7 +51,8 @@ public class BattleManager : MonoBehaviour
     {
         Idle,
         EnemySelect,
-        SkillUse
+        Use,
+        End
     }
 
 
@@ -51,13 +66,16 @@ public class BattleManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        enterKey = Input.GetKeyDown(KeyCode.Return);
+        escKey = Input.GetKeyDown(KeyCode.Escape);
         switch(curBattleStatus)
         {
             case BattleStatus.PlotSelect:
-                if (Input.GetKeyDown(KeyCode.Return))
+                if (enterKey)
                 {
                     curBattleStatus = BattleStatus.PlayerTurn;
                     Debug.Log($"BattleManager: 현재 플롯:{playerPlot}");
+                    enterKey = false;
                 }
                 break;
         }
@@ -97,19 +115,24 @@ public class BattleManager : MonoBehaviour
         switch(curPlayerTurnStatus)
         {
             case PlayerTurnStatus.Idle:
-                if (Input.GetKeyDown(KeyCode.Return))
+                if (enterKey) {
                     curPlayerTurnStatus = PlayerTurnStatus.EnemySelect;
+                    enterKey = false;
+                }
                 break;
 
             case PlayerTurnStatus.EnemySelect:
-                if (Input.GetKeyDown(KeyCode.Return))
+                if (enterKey) {
                     curPlayerTurnStatus = PlayerTurnStatus.Idle;
-                if (Input.GetKeyDown(KeyCode.Escape))
+                    enterKey = false;
+                }
+                if (escKey) {
                     if (IsSkillCostUnderPlot())
-                        curPlayerTurnStatus = PlayerTurnStatus.SkillUse;
+                        curPlayerTurnStatus = PlayerTurnStatus.Use;
                     else
                         Debug.Log("BattleManager: 코스트 부족");
-
+                    escKey = false;
+                }
                 break;
         }
 
@@ -118,34 +141,75 @@ public class BattleManager : MonoBehaviour
 
         switch(curPlayerTurnStatus)
         {
+            
             case PlayerTurnStatus.Idle:
-                if (Input.GetKeyDown(KeyCode.A) && skillNum > 0)
-                {
-                    skillNum--;
-                    Debug.Log($"BattleManager: cur skill:{playerData.getSkill(skillNum).Name}");
-                }
+                // 플레이어가 A키를 누르면 도구 선택 모드로 전환
+                if (Input.GetKeyDown(KeyCode.A))
+                    curToolOrSkill = ToolOrSkill.Tool;
+                // 플레이어가 D키를 누르면 스킬 선택 모드로 전환
+                if (Input.GetKeyDown(KeyCode.D))
+                    curToolOrSkill = ToolOrSkill.Skill;
 
-                if (Input.GetKeyDown(KeyCode.D) && skillNum < playerData.getSkillCount()-1) 
+                // 스킬 선택 모드일 때의 동작
+                if (curToolOrSkill == ToolOrSkill.Skill)
                 {
-                    skillNum++;
-                    Debug.Log($"BattleManager: cur skill:{playerData.getSkill(skillNum).Name}");
+                    // W키로 이전 스킬 선택 (0번 스킬이 아닐 경우)
+                    if (Input.GetKeyDown(KeyCode.W) && skillNum > 0)
+                    {
+                        skillNum--;
+                        Debug.Log($"BattleManager: cur skill:{playerData.getSkill(skillNum).Name}");
+                    }
+                    // S키로 다음 스킬 선택 (마지막 스킬이 아닐 경우)
+                    if (Input.GetKeyDown(KeyCode.S) && skillNum < playerData.getSkillCount()-1) 
+                    {
+                        skillNum++;
+                        Debug.Log($"BattleManager: cur skill:{playerData.getSkill(skillNum).Name}");
+                    }
+                }
+                // 도구 선택 모드일 때의 동작
+                if (curToolOrSkill == ToolOrSkill.Tool)
+                {
+                    // W키로 이전 도구 선택 (0번 도구가 아닐 경우)
+                    if (Input.GetKeyDown(KeyCode.W) && toolNum > 0)
+                    {
+                        toolNum--;
+                        Debug.Log($"BattleManager: cur tool:{toolNum}");
+                    }
+                    // S키로 다음 도구 선택 (마지막 도구가 아닐 경우)
+                    if (Input.GetKeyDown(KeyCode.S) && toolNum < 2)
+                    {
+                        toolNum++;
+                        Debug.Log($"BattleManager: cur tool:{toolNum}");
+                    }
                 }
                 break;
+
             case PlayerTurnStatus.EnemySelect:
-                if (Input.GetKeyDown(KeyCode.W) && enemyNum > 0)
+                // W키를 눌러서 이전 적 선택 (첫 번째 적이 아닐 경우)
+                if (Input.GetKeyDown(KeyCode.W) && SelectedEnemyNum > 0)
                 {
-                    enemyNum--;
+                    SelectedEnemyNum--;
                     Debug.Log($"BattleManager: cur enemy:{-1}");
                 }
 
-                if (Input.GetKeyDown(KeyCode.S) && enemyNum < enemyMax - 1)
+                // S키를 눌러서 다음 적 선택 (마지막 적이 아닐 경우)
+                if (Input.GetKeyDown(KeyCode.S) && SelectedEnemyNum < enemyMax - 1)
                 {
-                    enemyNum++;
+                    SelectedEnemyNum++;
                     Debug.Log($"BattleManager: cur enemy:{-1}");
                 }
                 break;
-            case PlayerTurnStatus.SkillUse:
-                playerData.getSkill(skillNum).UseSkill(enemies[enemyNum]);
+
+            case PlayerTurnStatus.Use:
+                // 선택된 스킬을 가져와서 선택된 적에게 사용
+                Skill skill = playerData.getSkill(skillNum);
+                skill.UseSkill(enemies[SelectedEnemyNum]);
+                
+                // 공격 스킬인 경우 턴 종료, 아닌 경우 대기 상태로 돌아감
+                if (skill.type == Skill.SkillType.Attack)
+                    curPlayerTurnStatus = PlayerTurnStatus.End;
+                else
+                    curPlayerTurnStatus = PlayerTurnStatus.Idle;
                 break;
 
         }
