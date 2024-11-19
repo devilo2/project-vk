@@ -18,8 +18,8 @@ EditorBuildSettings:
     path: Assets/Scenes/exploration.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/Scenes/Judgment.unity
-    guid: 23b5e64478ecea14487a8f32900caf84
+    path: Assets/Scenes/judgment.unity
+    guid: 4cbd1ffcc38859842b4f7895230bf35f
   - enabled: 1
     path: Assets/Scenes/Battle.unity
     guid: ec0d55295d33e0a4cb9569389fdb7168
