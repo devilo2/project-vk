@@ -77,8 +77,8 @@ public class PlayerData : MonoBehaviour
         judge = judgeObject.GetComponent<Judgment>();
 
         //테스트 코드
-        Skill testSkill1 = new Skill("테스트 스킬", 2);
-        Skill testSkill2 = new Skill("테스트 스킬2", 10);
+        Skill testSkill1 = new Skill("테스트 스킬", 2, Skill.SkillType.Attack, new Judgment.Status("테스트 스텟", 0, 0));
+        Skill testSkill2 = new Skill("테스트 스킬2", 6, Skill.SkillType.Support, new Judgment.Status("테스트 스텟", 0, 0));
 
         skill = new Skill[] {testSkill1, testSkill2};
     }

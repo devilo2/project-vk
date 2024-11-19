@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
+using UnityEditor;
 using UnityEngine;
 
 public class BattleManager : MonoBehaviour
@@ -15,15 +16,19 @@ public class BattleManager : MonoBehaviour
 
     int skillNum = 0;
 
-    Enemy[] enemies; 
-    int enemyNum = 0;
-    int enemyMax = 0;
+    const int enemyMax = 3;
+
+    Enemy[] enemies = new Enemy[enemyMax]; 
+    int SelectedEnemyNum = 0;
 
     Boolean energyAmplification = false;
     public void EnableEnergyAmplification()
     {
         energyAmplification = true; 
     }
+
+    bool enterKey = false;
+    bool escKey = false;
 
     enum BattleStatus
     {
@@ -37,7 +42,8 @@ public class BattleManager : MonoBehaviour
     {
         Idle,
         EnemySelect,
-        SkillUse
+        Use,
+        End
     }
 
 
@@ -51,13 +57,16 @@ public class BattleManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        enterKey = Input.GetKeyDown(KeyCode.Return);
+        escKey = Input.GetKeyDown(KeyCode.Escape);
         switch(curBattleStatus)
         {
             case BattleStatus.PlotSelect:
-                if (Input.GetKeyDown(KeyCode.Return))
+                if (enterKey)
                 {
                     curBattleStatus = BattleStatus.PlayerTurn;
                     Debug.Log($"BattleManager: 현재 플롯:{playerPlot}");
+                    enterKey = false;
                 }
                 break;
         }
@@ -97,19 +106,24 @@ public class BattleManager : MonoBehaviour
         switch(curPlayerTurnStatus)
         {
             case PlayerTurnStatus.Idle:
-                if (Input.GetKeyDown(KeyCode.Return))
+                if (enterKey) {
                     curPlayerTurnStatus = PlayerTurnStatus.EnemySelect;
+                    enterKey = false;
+                }
                 break;
 
             case PlayerTurnStatus.EnemySelect:
-                if (Input.GetKeyDown(KeyCode.Return))
+                if (enterKey) {
                     curPlayerTurnStatus = PlayerTurnStatus.Idle;
-                if (Input.GetKeyDown(KeyCode.Escape))
+                    enterKey = false;
+                }
+                if (escKey) {
                     if (IsSkillCostUnderPlot())
-                        curPlayerTurnStatus = PlayerTurnStatus.SkillUse;
+                        curPlayerTurnStatus = PlayerTurnStatus.Use;
                     else
                         Debug.Log("BattleManager: 코스트 부족");
-
+                    escKey = false;
+                }
                 break;
         }
 
@@ -131,21 +145,26 @@ public class BattleManager : MonoBehaviour
                     Debug.Log($"BattleManager: cur skill:{playerData.getSkill(skillNum).Name}");
                 }
                 break;
+                
             case PlayerTurnStatus.EnemySelect:
-                if (Input.GetKeyDown(KeyCode.W) && enemyNum > 0)
+                if (Input.GetKeyDown(KeyCode.W) && SelectedEnemyNum > 0)
                 {
-                    enemyNum--;
+                    SelectedEnemyNum--;
                     Debug.Log($"BattleManager: cur enemy:{-1}");
                 }
 
-                if (Input.GetKeyDown(KeyCode.S) && enemyNum < enemyMax - 1)
+                if (Input.GetKeyDown(KeyCode.S) && SelectedEnemyNum < enemyMax - 1)
                 {
-                    enemyNum++;
+                    SelectedEnemyNum++;
                     Debug.Log($"BattleManager: cur enemy:{-1}");
                 }
                 break;
-            case PlayerTurnStatus.SkillUse:
-                playerData.getSkill(skillNum).UseSkill(enemies[enemyNum]);
+
+            case PlayerTurnStatus.Use:
+                Skill skill = playerData.getSkill(skillNum);
+                skill.UseSkill(enemies[SelectedEnemyNum]);
+                if (skill.type == Skill.SkillType.Attack)
+                    curPlayerTurnStatus = PlayerTurnStatus.End;
                 break;
 
         }
