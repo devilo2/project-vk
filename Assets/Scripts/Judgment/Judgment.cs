@@ -42,13 +42,13 @@ public class Judgment : MonoBehaviour
     };
 
     // 모든 스탯을 저장하는 리스트
-    private List<Status> statuses = new List<Status>();
+    public List<Status> statuses = new List<Status>();
     // 활성화된 스탯 리스트
-    private List<Status> availableStatuses = new List<Status>();
+    public List<Status> availableStatuses = new List<Status>();
     // 비활성화된 스탯 리스트
-    private List<Status> disavaiableStatuses = new List<Status>();
+    public List<Status> disavaiableStatuses = new List<Status>();
     // 가진 스탯 리스트
-    private List<Status> havingStatuses = new List<Status>();
+    public List<Status> havingStatuses = new List<Status>();
 
     public string LastJudgeStatName { get; private set; } // 마지막으로 판정된 스탯 이름
 
