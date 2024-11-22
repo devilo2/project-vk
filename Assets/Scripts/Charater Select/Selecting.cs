@@ -12,7 +12,7 @@ public class Selecting : MonoBehaviour
 {
     //현재 선택하고 있는 특성 enum
     //이름은 gameObject의 이름과 같음
-    private enum SelectingStatus
+    public enum SelectingStatus
     {
         Species,
         Status,
