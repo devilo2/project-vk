@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Temp.unity
     guid: 3fb0fae611b41984f8bfa5d25509b16b
   - enabled: 1
+    path: Assets/Scenes/title.unity
+    guid: 4b5c90a84474d16408e801f0c1e0bb62
+  - enabled: 1
     path: Assets/Scenes/PlayerDataManager.unity
     guid: 6650ead7b455aa243b666ab2b36e1185
   - enabled: 1
@@ -18,8 +21,8 @@ EditorBuildSettings:
     path: Assets/Scenes/exploration.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/Scenes/judgment.unity
-    guid: 4cbd1ffcc38859842b4f7895230bf35f
+    path: Assets/Scenes/Judgment.unity
+    guid: 23b5e64478ecea14487a8f32900caf84
   - enabled: 1
     path: Assets/Scenes/Battle.unity
     guid: ec0d55295d33e0a4cb9569389fdb7168
