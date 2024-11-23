@@ -75,7 +75,8 @@ public class BodyDice : MonoBehaviour
     // 판정 로직을 처리하는 메서드
     private void Judge(string statName, int dice)
     {
-        var result = judgment.Judge(statName, dice); // Judgment 클래스를 이용하여 판정 결과를 반환
+        judgment.SetJudgeResult(statName, dice); // Judgment 클래스를 이용하여 판정 결과를 반환
+        var result = judgment.Result;
 
         // 판정 결과에 따라 UI 업데이트
         switch (result)

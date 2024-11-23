@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BattleManager : MonoBehaviour
 {
@@ -189,20 +190,22 @@ public class BattleManager : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.W) && SelectedEnemyNum > 0)
                 {
                     SelectedEnemyNum--;
-                    Debug.Log($"BattleManager: cur enemy:{-1}");
+                    Debug.Log($"BattleManager: cur enemy:{SelectedEnemyNum}");
                 }
 
                 // S키를 눌러서 다음 적 선택 (마지막 적이 아닐 경우)
                 if (Input.GetKeyDown(KeyCode.S) && SelectedEnemyNum < enemyMax - 1)
                 {
                     SelectedEnemyNum++;
-                    Debug.Log($"BattleManager: cur enemy:{-1}");
+                    Debug.Log($"BattleManager: cur enemy:{SelectedEnemyNum}");
                 }
                 break;
 
             case PlayerTurnStatus.Use:
                 // 선택된 스킬을 가져와서 선택된 적에게 사용
+                SceneManager.LoadScene("Judgment", LoadSceneMode.Additive);
                 Skill skill = playerData.getSkill(skillNum);
+                //skill.DesignatedAttribute;
                 skill.UseSkill(enemies[SelectedEnemyNum]);
                 
                 // 공격 스킬인 경우 턴 종료, 아닌 경우 대기 상태로 돌아감
