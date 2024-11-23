@@ -206,7 +206,7 @@ public class BattleManager : MonoBehaviour
                 skill.UseSkill(enemies[SelectedEnemyNum]);
                 
                 // 공격 스킬인 경우 턴 종료, 아닌 경우 대기 상태로 돌아감
-                if (skill.type == Skill.SkillType.Attack)
+                if (skill.Type == Skill.SkillType.Attack)
                     curPlayerTurnStatus = PlayerTurnStatus.End;
                 else
                     curPlayerTurnStatus = PlayerTurnStatus.Idle;
