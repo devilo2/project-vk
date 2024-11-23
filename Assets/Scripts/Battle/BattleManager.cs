@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
+using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,6 +13,8 @@ public class BattleManager : MonoBehaviour
     PlayerData playerData;
 
     int playerPlot = 1;
+    int curCost = 0;
+
 
     BattleStatus curBattleStatus = BattleStatus.None;
     PlayerTurnStatus curPlayerTurnStatus = PlayerTurnStatus.Idle;
@@ -74,6 +78,7 @@ public class BattleManager : MonoBehaviour
             case BattleStatus.PlotSelect:
                 if (enterKey)
                 {
+                    curCost = playerPlot;
                     curBattleStatus = BattleStatus.PlayerTurn;
                     Debug.Log($"BattleManager: 현재 플롯:{playerPlot}");
                     enterKey = false;
@@ -203,19 +208,46 @@ public class BattleManager : MonoBehaviour
 
             case PlayerTurnStatus.Use:
                 // 선택된 스킬을 가져와서 선택된 적에게 사용
-                SceneManager.LoadScene("Judgment", LoadSceneMode.Additive);
-                Skill skill = playerData.getSkill(skillNum);
                 //skill.DesignatedAttribute;
-                skill.UseSkill(enemies[SelectedEnemyNum]);
-                
-                // 공격 스킬인 경우 턴 종료, 아닌 경우 대기 상태로 돌아감
-                if (skill.Type == Skill.SkillType.Attack)
-                    curPlayerTurnStatus = PlayerTurnStatus.End;
-                else
+                if(!IsSkillCostUnderPlot())
+                {
+                    Debug.Log("코스트 부족!");
                     curPlayerTurnStatus = PlayerTurnStatus.Idle;
+                    break;
+                }
+                StartCoroutine(WaitForJudgment());
+
                 break;
 
+               
+
         }
+    }
+
+
+    private IEnumerator WaitForJudgment()
+    {
+        Skill skill = playerData.getSkill(skillNum);
+        SceneManager.LoadScene("Judgment", LoadSceneMode.Additive);
+
+        while (playerData.Judgeresult == Judgment.JudgeResult.None)
+        {
+            yield return null; // 한 프레임 대기
+        }
+
+        if (playerData.Judgeresult == Judgment.JudgeResult.Success)
+        {
+            playerData.Judgeresult = Judgment.JudgeResult.None;
+            skill.UseSkill(enemies[SelectedEnemyNum]);
+            // 공격 스킬인 경우 턴 종료, 아닌 경우 대기 상태로 돌아감
+            if (skill.Type == Skill.SkillType.Attack)
+            {
+                curPlayerTurnStatus = PlayerTurnStatus.End;
+                yield return null;
+            }
+        }
+
+        curPlayerTurnStatus = PlayerTurnStatus.Idle;
     }
 
     private void EnemyTurn()
@@ -228,14 +260,13 @@ public class BattleManager : MonoBehaviour
     //스킬이 코스트 이하인지 체크
     private Boolean IsSkillCostUnderPlot()
     {
-        int maxCost = playerPlot;
         if (energyAmplification)
         {
-            maxCost += 2;
+            curCost += 2;
             energyAmplification = false;
         }
 
-        if (playerData.getSkill(skillNum).Cost < maxCost)
+        if (playerData.getSkill(skillNum).Cost < curCost)
             return true;
 
         return false;

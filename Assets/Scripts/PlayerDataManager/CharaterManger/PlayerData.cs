@@ -2,16 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.Intrinsics;
 using UnityEditor.Build;
+using UnityEditorInternal;
 using UnityEngine;
 
 public class PlayerData : MonoBehaviour
 {
-    public GameObject judgeObject;
-    private Judgment judge;
-
     private List<HealthStat> Health = new List<HealthStat>{HealthStat.Tech, HealthStat.Somatic, HealthStat.Medicine, HealthStat.Mosul, HealthStat.Tactics, HealthStat.Magic};
     private List<HealthStat> DamagedHealth = new List<HealthStat>();
 
+    public Judgment.JudgeResult Judgeresult { get; set; }
     public Species species { get; set; }
     private Item[] items;
     private List<object> keyItems;
@@ -46,7 +45,7 @@ public class PlayerData : MonoBehaviour
 
             DamagedHealth.Add(DamagedStat);
 
-            judge.DisableStat(DamagedStat);
+            //judge.DisableStat(DamagedStat);
         }
     }
 
@@ -66,15 +65,14 @@ public class PlayerData : MonoBehaviour
 
             Health.Add(HealStat);
 
-            judge.EnableStat(HealStat);
+            //judge.EnableStat(HealStat);
         }
     }
 
     // Start is called before the first frame update
     //judgement 가져오기
     void Start()
-    {
-        judge = judgeObject.GetComponent<Judgment>();
+    { 
 
         //테스트 코드
         Skill testSkill1 = new Skill("테스트 스킬", 2, Skill.SkillType.Attack, "사격", 3);
