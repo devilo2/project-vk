@@ -282,6 +282,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   button: {fileID: 1391673398}
   exitButton: {fileID: 104581226}
+  judgment: {fileID: 1119887841}
 --- !u!1 &301878654
 GameObject:
   m_ObjectHideFlags: 0
