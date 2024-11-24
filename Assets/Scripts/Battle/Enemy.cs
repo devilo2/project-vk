@@ -6,7 +6,14 @@ public class Enemy
 {
     public string Name { get; private set; }
     public string Tag { get; private set; }
+    public int HP { get; private set; }
 
+
+    public Enemy(string name, int hp)
+    {
+        Name = name;
+        HP = hp;
+    }
     public Enemy(string tag)
     {
         Tag = tag;
