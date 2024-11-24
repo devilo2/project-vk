@@ -294,6 +294,10 @@ public class BattleManager : MonoBehaviour
 
     private void EnemyTurn()
     {
+        for (int i = 0; i < enemyMax; i++)
+        {
+            enemies[i].EnemyTurn(playerPlot);
+        }
          curBattleStatus = BattleStatus.PlotSelect;
          playerPlot = 1;
     }
