@@ -16,17 +16,15 @@ public class show_skill : MonoBehaviour
         automaton_skill_tab.SetActive(false);
         furry_skill_tab.SetActive(false);
 
-        int specis = 1;
-
-        if (specis == 0){
+        if (playerData.species == Species.Human){
             human_skill_tab.SetActive(true);
         }
 
-        if (specis == 1){
+        if (playerData.species == Species.Automaton){
             automaton_skill_tab.SetActive(true);
         }
 
-        if (specis == 2){
+        if (playerData.species == Species.Furry){
             furry_skill_tab.SetActive(true);
         }
     }
