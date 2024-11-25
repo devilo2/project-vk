@@ -8,6 +8,5 @@ public class ReturningGear : Tool
     public override void Use()
     {
         Judgment judgment = GameObject.Find("Judgement Manger").GetComponent<Judgment>();
-        judgment.ReJudge();
     }
 }
