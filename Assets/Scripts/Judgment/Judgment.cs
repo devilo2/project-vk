@@ -205,6 +205,7 @@ public class Judgment : MonoBehaviour
                 Debug.Log("삭제:" + availableStatuses[i].name);
                 disavaiableStatuses.Add(availableStatuses[i]);
                 availableStatuses.RemoveAt(i);
+                Hpmanager.Hp -= 1;
             }
         }
     }
@@ -219,6 +220,7 @@ public class Judgment : MonoBehaviour
                 Debug.Log("복원:" + disavaiableStatuses[i].name);
                 availableStatuses.Add(disavaiableStatuses[i]);
                 disavaiableStatuses.RemoveAt(i);
+                Hpmanager.Hp += 1;
             }
         }
     }
