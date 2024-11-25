@@ -8,7 +8,6 @@ using UnityEngine.UI;
 public class Judgment : MonoBehaviour
 {
     // 주사위 관련 필드
-    [SerializeField] public BodyDice BodyDice; // 주사위 결과를 계산하는 BodyDice 클래스 참조
 
     public const int STATUS_X_MAX = 6; // 스탯의 X 크기 (예: 스탯 맵의 가로 크기)
     public const int STATUS_Y_MAX = 9; // 스탯의 Y 크기 (예: 스탯 맵의 세로 크기)
@@ -168,11 +167,6 @@ public class Judgment : MonoBehaviour
         }
     }
 
-    // 이전 스탯에 대해 다시 판정
-    public void ReJudge()
-    {
-        BodyDice.RollDice(); // 주사위 다시 굴리기
-    }
 
     // 주사위 값과 스탯 이름을 기반으로 판정 결과를 반환
     public void SetJudgeResult(string name, int dice)

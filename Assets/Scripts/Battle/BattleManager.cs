@@ -7,12 +7,15 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class BattleManager : MonoBehaviour
 {
     PlayerData playerData;
 
-    int playerPlot = 1;
+    public delegate void BattleEndedHandler();
+    public event BattleEndedHandler OnBattleEnded;
+    public int playerPlot = 1;
     int curCost = 0;
 
 
@@ -120,6 +123,7 @@ public class BattleManager : MonoBehaviour
                 break;
         }
     }
+
 
     private void PlotSelecing()
     {
@@ -319,5 +323,52 @@ public class BattleManager : MonoBehaviour
         return false;
 
     }
+
+    public void InitializeBattle(int selectedPlot)
+    {
+        playerPlot = selectedPlot;
+        curBattleStatus = BattleStatus.PlayerTurn;
+        Debug.Log($"BattleManager Initialized with Plot: {playerPlot}");
+    }
+
+    public void SelectToolMode()
+    {
+        curToolOrSkill = ToolOrSkill.Tool;
+        Debug.Log("Tool Mode Selected");
+    }
+
+    public void SelectSkillMode()
+    {
+        curToolOrSkill = ToolOrSkill.Skill;
+        Debug.Log("Skill Mode Selected");
+    }
+
+    public void UseSkill(int skillIndex)
+    {
+        Debug.Log($"Using Skill at Index {skillIndex}");
+        Skill selectedSkill = playerData.getSkill(skillIndex);
+
+        // 스킬 효과 적용
+        selectedSkill.UseSkill(enemies[SelectedEnemyNum]);
+    }
+    public void UseTool(int toolIndex)
+    {
+        // 선택된 도구에 따라 동작
+        Debug.Log($"Using Tool at Index {toolIndex}");
+        // 도구의 효과를 구현
+    }
+
+    public void EndPlayerTurn()
+    {
+        // 턴 종료 후 이벤트 호출
+        OnBattleEnded?.Invoke(); // UIManager의 OnBattleEnded 호출
+    }
+
+    public int GetSkillCount()
+    {
+        return playerData.getSkillCount();
+    }
+
+
 
 }

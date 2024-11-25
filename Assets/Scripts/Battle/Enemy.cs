@@ -20,7 +20,7 @@ public class Enemy
     }
     // Start is called before the first frame update
     
-    public abstract void EnemyTurn(int playerPlot)
+    public void EnemyTurn(int playerPlot)
     {
         int plot = Random.Range(1, 6);
         Debug.Log($"Enemy: enemy plot:{plot}");
