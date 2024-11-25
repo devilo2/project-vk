@@ -2,14 +2,19 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
+using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BattleManager : MonoBehaviour
 {
     PlayerData playerData;
 
     int playerPlot = 1;
+    int curCost = 0;
+
 
     BattleStatus curBattleStatus = BattleStatus.None;
     PlayerTurnStatus curPlayerTurnStatus = PlayerTurnStatus.Idle;
@@ -32,11 +37,12 @@ public class BattleManager : MonoBehaviour
 
     bool enterKey = false;
     bool escKey = false;
-
+    bool waitJudgment = false;
     enum ToolOrSkill
     {
         Tool,
-        Skill
+        Skill,
+        NextTurn
     }
 
     enum BattleStatus
@@ -61,6 +67,18 @@ public class BattleManager : MonoBehaviour
     {
         playerData = GameObject.Find("PlayerManager").GetComponent<PlayerData>();
         curBattleStatus = BattleStatus.PlotSelect;
+        waitJudgment = false;
+        enterKey = false;
+        escKey = false;
+        curPlayerTurnStatus = PlayerTurnStatus.Idle;
+        curToolOrSkill = ToolOrSkill.Tool;
+        skillNum = 0;
+        toolNum = 0;
+        SelectedEnemyNum = 0;
+        energyAmplification = false;
+        enemies[0] = new Enemy("적1", 10);
+        enemies[1] = new Enemy("적2", 10);
+        enemies[2] = new Enemy("적3", 10); 
     }
 
     // Update is called once per frame
@@ -73,9 +91,17 @@ public class BattleManager : MonoBehaviour
             case BattleStatus.PlotSelect:
                 if (enterKey)
                 {
+                    curCost = playerPlot;
+                    curPlayerTurnStatus = PlayerTurnStatus.Idle;
                     curBattleStatus = BattleStatus.PlayerTurn;
                     Debug.Log($"BattleManager: 현재 플롯:{playerPlot}");
                     enterKey = false;
+                }
+                break;
+            case BattleStatus.PlayerTurn:
+                if(curPlayerTurnStatus == PlayerTurnStatus.End)
+                {
+                    curBattleStatus = BattleStatus.EnemyTurn;
                 }
                 break;
         }
@@ -116,22 +142,32 @@ public class BattleManager : MonoBehaviour
         {
             case PlayerTurnStatus.Idle:
                 if (enterKey) {
+                    if (curToolOrSkill == ToolOrSkill.NextTurn)
+                    {
+                        curPlayerTurnStatus = PlayerTurnStatus.End;
+                        enterKey = false;
+                        break;
+                    }
+
+                    if(!IsSkillCostUnderPlot())
+                    {
+                        Debug.Log("코스트 부족!");
+                        curPlayerTurnStatus = PlayerTurnStatus.Idle;
+                        break;
+                    }
                     curPlayerTurnStatus = PlayerTurnStatus.EnemySelect;
                     enterKey = false;
                 }
                 break;
 
             case PlayerTurnStatus.EnemySelect:
-                if (enterKey) {
-                    curPlayerTurnStatus = PlayerTurnStatus.Idle;
-                    enterKey = false;
-                }
                 if (escKey) {
-                    if (IsSkillCostUnderPlot())
-                        curPlayerTurnStatus = PlayerTurnStatus.Use;
-                    else
-                        Debug.Log("BattleManager: 코스트 부족");
+                    curPlayerTurnStatus = PlayerTurnStatus.Idle;
                     escKey = false;
+                }
+                if (enterKey) {
+                    curPlayerTurnStatus = PlayerTurnStatus.Use;
+                    enterKey = false;
                 }
                 break;
         }
@@ -143,12 +179,25 @@ public class BattleManager : MonoBehaviour
         {
             
             case PlayerTurnStatus.Idle:
-                // 플레이어가 A키를 누르면 도구 선택 모드로 전환
+                // 플레이어가 A키를 누르면 이전 모드로 전환
                 if (Input.GetKeyDown(KeyCode.A))
-                    curToolOrSkill = ToolOrSkill.Tool;
-                // 플레이어가 D키를 누르면 스킬 선택 모드로 전환
+                {
+                    if (curToolOrSkill > ToolOrSkill.Tool)
+                    {
+                        curToolOrSkill--;
+                        Debug.Log(curToolOrSkill);
+                    }
+                }
+                // 플레이어가 D키를 누르면 다음 모드로 전환
                 if (Input.GetKeyDown(KeyCode.D))
-                    curToolOrSkill = ToolOrSkill.Skill;
+                {
+                    if (curToolOrSkill < ToolOrSkill.NextTurn)
+                    {
+                        curToolOrSkill++;
+                        Debug.Log(curToolOrSkill);
+                    }
+                }
+                
 
                 // 스킬 선택 모드일 때의 동작
                 if (curToolOrSkill == ToolOrSkill.Skill)
@@ -158,12 +207,14 @@ public class BattleManager : MonoBehaviour
                     {
                         skillNum--;
                         Debug.Log($"BattleManager: cur skill:{playerData.getSkill(skillNum).Name}");
+                        Debug.Log($"BattleManager: cur cost:{curCost}");
                     }
                     // S키로 다음 스킬 선택 (마지막 스킬이 아닐 경우)
                     if (Input.GetKeyDown(KeyCode.S) && skillNum < playerData.getSkillCount()-1) 
                     {
                         skillNum++;
                         Debug.Log($"BattleManager: cur skill:{playerData.getSkill(skillNum).Name}");
+                        Debug.Log($"BattleManager: cur cost:{curCost}");
                     }
                 }
                 // 도구 선택 모드일 때의 동작
@@ -182,6 +233,7 @@ public class BattleManager : MonoBehaviour
                         Debug.Log($"BattleManager: cur tool:{toolNum}");
                     }
                 }
+
                 break;
 
             case PlayerTurnStatus.EnemySelect:
@@ -189,35 +241,65 @@ public class BattleManager : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.W) && SelectedEnemyNum > 0)
                 {
                     SelectedEnemyNum--;
-                    Debug.Log($"BattleManager: cur enemy:{-1}");
+                    Debug.Log($"BattleManager: cur enemy:{SelectedEnemyNum}");
                 }
 
                 // S키를 눌러서 다음 적 선택 (마지막 적이 아닐 경우)
                 if (Input.GetKeyDown(KeyCode.S) && SelectedEnemyNum < enemyMax - 1)
                 {
                     SelectedEnemyNum++;
-                    Debug.Log($"BattleManager: cur enemy:{-1}");
+                    Debug.Log($"BattleManager: cur enemy:{SelectedEnemyNum}");
                 }
                 break;
 
             case PlayerTurnStatus.Use:
                 // 선택된 스킬을 가져와서 선택된 적에게 사용
-                Skill skill = playerData.getSkill(skillNum);
-                skill.UseSkill(enemies[SelectedEnemyNum]);
-                
-                // 공격 스킬인 경우 턴 종료, 아닌 경우 대기 상태로 돌아감
-                if (skill.type == Skill.SkillType.Attack)
-                    curPlayerTurnStatus = PlayerTurnStatus.End;
-                else
-                    curPlayerTurnStatus = PlayerTurnStatus.Idle;
+                //skill.DesignatedAttribute;
+                if(!waitJudgment)
+                {
+                    waitJudgment = true;
+                    StartCoroutine(WaitForJudgment());
+                }
                 break;
+
+               
 
         }
     }
 
+
+    private IEnumerator WaitForJudgment()
+    {
+        Skill skill = playerData.getSkill(skillNum);
+        SceneManager.LoadScene("Judgment", LoadSceneMode.Additive);
+
+       yield return new WaitUntil(() => playerData.Judgeresult != Judgment.JudgeResult.None);
+
+        curCost -= skill.Cost;
+        if (playerData.Judgeresult == Judgment.JudgeResult.Success)
+        {
+            playerData.Judgeresult = Judgment.JudgeResult.None;
+            skill.UseSkill(enemies[SelectedEnemyNum]);
+            // 공격 스킬인 경우 턴 종료, 아닌 경우 대기 상태로 돌아감
+            if (skill.Type == Skill.SkillType.Attack)
+            {
+                curPlayerTurnStatus = PlayerTurnStatus.End;
+                yield return null;
+            }
+        }
+
+        curPlayerTurnStatus = PlayerTurnStatus.Idle;
+        waitJudgment = false;
+    }
+
     private void EnemyTurn()
     {
-         
+        for (int i = 0; i < enemyMax; i++)
+        {
+            enemies[i].EnemyTurn(playerPlot);
+        }
+         curBattleStatus = BattleStatus.PlotSelect;
+         playerPlot = 1;
     }
 
 
@@ -225,14 +307,13 @@ public class BattleManager : MonoBehaviour
     //스킬이 코스트 이하인지 체크
     private Boolean IsSkillCostUnderPlot()
     {
-        int maxCost = playerPlot;
         if (energyAmplification)
         {
-            maxCost += 2;
+            curCost += 2;
             energyAmplification = false;
         }
 
-        if (playerData.getSkill(skillNum).Cost < maxCost)
+        if (playerData.getSkill(skillNum).Cost < curCost)
             return true;
 
         return false;

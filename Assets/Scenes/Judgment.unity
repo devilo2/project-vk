@@ -282,6 +282,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   button: {fileID: 1391673398}
   exitButton: {fileID: 104581226}
+  judgment: {fileID: 1119887841}
 --- !u!1 &301878654
 GameObject:
   m_ObjectHideFlags: 0
@@ -374,7 +375,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &834702892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -749,7 +750,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1279007813}
   - component: {fileID: 1279007812}
-  - component: {fileID: 1279007811}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -757,14 +757,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &1279007811
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1279007810}
-  m_Enabled: 1
 --- !u!20 &1279007812
 Camera:
   m_ObjectHideFlags: 0
