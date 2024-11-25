@@ -26,7 +26,7 @@ public class Skill
     // 기본적으로 모든 스킬은 UseSkill을 가짐
     public virtual void UseSkill(Enemy enemy)
     {
-        Debug.Log($"Using skill: {Name} on {enemy}");
+        Debug.Log($"Using skill: {Name} on {enemy.Name}");
     }
 }
 

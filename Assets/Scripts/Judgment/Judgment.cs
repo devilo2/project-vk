@@ -19,6 +19,7 @@ public class Judgment : MonoBehaviour
     // 판정 결과를 나타내는 열거형
     public enum JudgeResult
     {
+        None, //없음
         Pumble, // 펌블 (최악의 결과)
         Fail,   // 실패
         Success,// 성공
@@ -174,7 +175,7 @@ public class Judgment : MonoBehaviour
     }
 
     // 주사위 값과 스탯 이름을 기반으로 판정 결과를 반환
-    public JudgeResult Judge(string name, int dice)
+    public void SetJudgeResult(string name, int dice)
     {
         LastJudgeStatName = name; // 마지막 판정된 스탯 이름 저장
         GetJudgeNum(name); // 판정 기준 값 계산
@@ -198,7 +199,6 @@ public class Judgment : MonoBehaviour
         {
             Result = JudgeResult.Fail; // 그 외의 경우 실패
         }
-        return Result;
     }
 
     // 체력이 깎인 스탯을 비활성화 (건강 상태 관련 스탯 비활성화)
