@@ -7,8 +7,8 @@ using UnityEngine;
 
 public class PlayerData : MonoBehaviour
 {
-    private List<HealthStat> Health = new List<HealthStat>{HealthStat.Tech, HealthStat.Somatic, HealthStat.Medicine, HealthStat.Mosul, HealthStat.Tactics, HealthStat.Magic};
-    private List<HealthStat> DamagedHealth = new List<HealthStat>();
+    public List<HealthStat> Health = new List<HealthStat>{HealthStat.Tech, HealthStat.Somatic, HealthStat.Medicine, HealthStat.Mosul, HealthStat.Tactics, HealthStat.Magic};
+    public List<HealthStat> DamagedHealth = new List<HealthStat>();
 
     public Judgment.JudgeResult Judgeresult { get; set; }
     public Species species { get; set; }
