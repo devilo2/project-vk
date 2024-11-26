@@ -41,6 +41,7 @@ public class BattleManager : MonoBehaviour
     bool enterKey = false;
     bool escKey = false;
     bool waitJudgment = false;
+
     enum ToolOrSkill
     {
         Tool,
@@ -68,6 +69,7 @@ public class BattleManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //플레이어 데이터 초기화
         playerData = GameObject.Find("PlayerManager").GetComponent<PlayerData>();
         curBattleStatus = BattleStatus.PlotSelect;
         waitJudgment = false;
@@ -271,14 +273,16 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-
+    
     private IEnumerator WaitForJudgment()
     {
         Skill skill = playerData.getSkill(skillNum);
         SceneManager.LoadScene("Judgment", LoadSceneMode.Additive);
 
+        //판정씬을 대기
        yield return new WaitUntil(() => playerData.Judgeresult != Judgment.JudgeResult.None);
 
+        //판정 후 결과에 따라 코스트 차감 및 스킬 사용
         curCost -= skill.Cost;
         if (playerData.Judgeresult == Judgment.JudgeResult.Success)
         {

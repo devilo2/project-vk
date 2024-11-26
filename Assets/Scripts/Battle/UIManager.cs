@@ -113,7 +113,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    // Plot 버튼 하이라이트 처리
+        // Plot 버튼 하이라이트 처리
     void HighlightPlotButton(int index)
     {
         for (int i = 0; i < plotButtons.Length; i++)
@@ -199,7 +199,7 @@ public class UIManager : MonoBehaviour
                 Debug.LogError("Invalid Battle Option");
                 break;
         }
-    }
+    }   
 
     // Battle이 끝난 후 Plot 선택 화면으로 돌아가기
     void OnBattleEnded()

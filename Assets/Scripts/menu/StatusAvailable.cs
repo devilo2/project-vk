@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
 
 public class StatusAvailable : MonoBehaviour
 {
     [SerializeField] private GameObject status; // 버튼들을 포함하는 오브젝트
-    [SerializeField] private Judgment judgment; // Judgment 스크립트
+    private PlayerData playerData; // playerData 스크립트
 
     // Start is called before the first frame update
     void Start()
     {
-        if (judgment == null || status == null)
+        playerData = GameObject.Find("PlayerManager").GetComponent<PlayerData>();
+        if (status == null)
         {
-            Debug.LogError("Judgment 또는 Status 오브젝트가 연결되지 않았습니다!");
+            Debug.LogError("Status 오브젝트가 연결되지 않았습니다!");
             return;
         }
 
@@ -27,7 +27,7 @@ public class StatusAvailable : MonoBehaviour
         }
 
         // 활성화해야 할 버튼 이름 가져오기
-        List<Judgment.Status> statusObjects = judgment.availableStatuses;
+        List<PlayerData.Status> statusObjects = playerData.availableStatuses;
         if (statusObjects == null || statusObjects.Count == 0)
         {
             Debug.LogWarning("활성화할 상태가 없습니다.");
