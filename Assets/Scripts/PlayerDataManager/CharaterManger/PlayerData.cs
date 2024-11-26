@@ -181,7 +181,7 @@ public class PlayerData : MonoBehaviour
 
             DamagedHealth.Add(DamagedStat);
 
-            DisableStat(DamagedStat);
+                DisableStat(DamagedStat);
         }
     }
 

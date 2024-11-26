@@ -13,8 +13,16 @@ public class Hpmanager : MonoBehaviour
     [SerializeField] private Sprite[] Hitpoint;
     [SerializeField] private Image HpImage;
     // Start is called before the first frame update
+    private PlayerData playerData;
+
+    void Start()
+    {
+        playerData = GameObject.Find("PlayerManager").GetComponent<PlayerData>();
+    }
+
     void Update()
     {
+        Hp = playerData.Health.Count;
         // Hp 값을 배열 범위 내로 제한
         if (Hp >= 0 && Hp < Hitpoint.Length)
         {
