@@ -7,7 +7,15 @@ public class Enemy
     public string Name { get; private set; } //적의 이름
     public string Tag { get; private set; }
     public int HP { get; private set; } //적의 체력
+    private List<Debuff> debuffs;
+    public int diceReduce = 0;
+    public Judgment judgment;
+    public int plot;
 
+    public void SetPlot()
+    {
+        plot = Random.Range(1, 6);
+    }
     public Enemy(string name, int hp)
     {
         Name = name;
@@ -17,12 +25,29 @@ public class Enemy
     {
         Tag = tag;
     }
-    
+    public void AddDebuff(Debuff debuff)
+    {
+        debuffs.Add(debuff);
+    }
+
     //적 턴 처리 코드
     public void EnemyTurn(int playerPlot)
     {
+        judgment = GameObject.Find("Judgement Manger").GetComponent<Judgment>();
+        if(diceReduce > 0)
+        {
+            judgment.diceReduce = diceReduce;
+        }
         //임의의 플롯을 선택해 거리에 따라 스킬 사용
-        int plot = Random.Range(1, 6);
+        foreach(Debuff debuff in debuffs)
+        {
+            debuff.ApplyEffect(this);
+            if(debuff.duration <= 0)
+            {
+                debuffs.Remove(debuff);
+            }
+        }
+        SetPlot();
         Debug.Log($"Enemy: enemy plot:{plot}");
     }
 

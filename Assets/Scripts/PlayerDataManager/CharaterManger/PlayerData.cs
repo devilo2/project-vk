@@ -17,6 +17,12 @@ public class PlayerData : MonoBehaviour
     private Item[] items;
     private List<object> keyItems;
     private Skill[] skill;
+    public List<Debuff> debuffs = new List<Debuff>();
+    public bool OverchargeUsed = false;
+
+
+    public bool damagePass = false;
+    public int damageReduce = 0;
 
     //½ºÅÈ
     public const int STATUS_X_MAX = 6; // ½ºÅÈÀÇ X Å©±â (¿¹: ½ºÅÈ ¸ÊÀÇ °¡·Î Å©±â)Assets/Scripts/PlayerDataManager/CharaterManger/PlayerData.cs
@@ -167,8 +173,17 @@ public class PlayerData : MonoBehaviour
     }
 
     //numÀÇ È½¼ö ¸¸Å­ ·£´ıÇÑ Ã¼·ÂÀ» ±ï´Â´Ù.
-    void Damaged(int num)
+    public void Damaged(int num)
     {
+        if(damagePass)
+        {
+            damagePass = false;
+            return;
+        }
+
+        num = num - damageReduce;
+        damageReduce = 0;
+
         for (int i = 0; i < num; i++)
         {
             if (Health.Count <= 0)
@@ -240,7 +255,10 @@ public class PlayerData : MonoBehaviour
         skill = new Skill[] {testSkill1, testSkill2};
     }
 
-        
+    public void AddDebuff(Debuff debuff)
+    {
+        debuffs.Add(debuff);
+    }
 
     // Update is called once per frame
     void Update()

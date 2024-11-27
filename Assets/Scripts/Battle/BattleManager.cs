@@ -12,6 +12,7 @@ using UnityEngine.UI;
 public class BattleManager : MonoBehaviour
 {
     PlayerData playerData; //플레이어 데이터
+    Judgment judgment;
 
     public delegate void BattleEndedHandler();
     public event BattleEndedHandler OnBattleEnded;
@@ -76,6 +77,7 @@ public class BattleManager : MonoBehaviour
     {
         //플레이어 데이터 초기화
         playerData = GameObject.Find("PlayerManager").GetComponent<PlayerData>();
+        judgment = GameObject.Find("Judgement Manger").GetComponent<Judgment>();
         curBattleStatus = BattleStatus.PlotSelect;
         waitJudgment = false;
         enterKey = false;
@@ -86,11 +88,15 @@ public class BattleManager : MonoBehaviour
         toolNum = 0;
         SelectedEnemyNum = 0;
         energyAmplification = false;
-
+        playerData.OverchargeUsed = false;
         //테스트 적
         enemies[0] = new Enemy("적1", 10);
         enemies[1] = new Enemy("적2", 10);
         enemies[2] = new Enemy("적3", 10); 
+        for (int i = 0; i < enemyMax; i++)
+        {
+            enemies[i].SetPlot();
+        }
     }
 
     // Update is called once per frame
@@ -115,6 +121,7 @@ public class BattleManager : MonoBehaviour
             case BattleStatus.PlayerTurn:
                 if(curPlayerTurnStatus == PlayerTurnStatus.End)
                 {
+                    judgment.diceReduce = 0;
                     curBattleStatus = BattleStatus.EnemyTurn;
                 }
                 break;
@@ -274,6 +281,11 @@ public class BattleManager : MonoBehaviour
             case PlayerTurnStatus.Use:
                 // 선택된 스킬을 가져와서 선택된 적에게 사용
                 //skill.DesignatedAttribute;
+                if(Mathf.Abs(enemies[SelectedEnemyNum].plot - playerPlot) <= playerData.getSkill(skillNum).Range)
+                {
+                    curPlayerTurnStatus = PlayerTurnStatus.Idle;
+                    break;
+                }
                 if(!waitJudgment)
                 {
                     waitJudgment = true;
@@ -290,17 +302,20 @@ public class BattleManager : MonoBehaviour
     private IEnumerator WaitForJudgment()
     {
         Skill skill = playerData.getSkill(skillNum);
+        judgment.SetLastJudgeStatName(skill.DesignatedAttribute);
         SceneManager.LoadScene("Judgment", LoadSceneMode.Additive);
+
 
         //판정씬을 대기
        yield return new WaitUntil(() => playerData.Judgeresult != Judgment.JudgeResult.None);
 
         //판정 후 결과에 따라 코스트 차감 및 스킬 사용
-        if (playerData.Judgeresult == Judgment.JudgeResult.Success)
+        if (playerData.Judgeresult >= Judgment.JudgeResult.Success)
         {
             curCost -= skill.Cost;
+            skill.UseSkill(enemies[SelectedEnemyNum], playerData.Judgeresult); //스킬 사용
             playerData.Judgeresult = Judgment.JudgeResult.None;
-            skill.UseSkill(enemies[SelectedEnemyNum]); //스킬 사용
+
             // 공격 스킬인 경우 턴 종료, 아닌 경우 대기 상태로 돌아감
             if (skill.Type == Skill.SkillType.Attack)
             {
@@ -368,7 +383,7 @@ public class BattleManager : MonoBehaviour
         Skill selectedSkill = playerData.getSkill(skillIndex);
 
         // 스킬 효과 적용
-        selectedSkill.UseSkill(enemies[SelectedEnemyNum]);
+        selectedSkill.UseSkill(enemies[SelectedEnemyNum], playerData.Judgeresult);
     }
     public void UseTool(int toolIndex)
     {

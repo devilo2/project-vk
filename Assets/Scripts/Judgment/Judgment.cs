@@ -13,6 +13,7 @@ public class Judgment : MonoBehaviour
     public int judgment_value { get; private set; } // 판정 기준 값
     public JudgeResult Result { get; private set; } // 판정 결과 (Pumble, Fail, Success, Special)
 
+    public int diceReduce = 0;
     // 판정 결과를 나타내는 열거형
     public enum JudgeResult
     {
@@ -69,13 +70,18 @@ public class Judgment : MonoBehaviour
         }
     }
 
-
+    public void SetLastJudgeStatName(string name)
+    {
+        LastJudgeStatName = name;
+    }
     // 주사위 값과 스탯 이름을 기반으로 판정 결과를 반환
-    public void SetJudgeResult(string name, int dice)
+    public JudgeResult SetJudgeResult(string name, int dice)
     {
         LastJudgeStatName = name; // 마지막 판정된 스탯 이름 저장
         GetJudgeNum(name); // 판정 기준 값 계산
 
+        dice = dice - diceReduce;
+        diceReduce = 0;
         DiceResult = dice; // 주사위 결과 저장
 
         // 판정 기준에 따른 결과 설정
@@ -95,6 +101,8 @@ public class Judgment : MonoBehaviour
         {
             Result = JudgeResult.Fail; // 그 외의 경우 실패
         }
+
+        return Result;
     }
 
     
