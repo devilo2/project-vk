@@ -49,7 +49,7 @@ public class PainfulWound : Skill // 범용: 고통스러운 상처
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
-        enemy.Debuffs.Add(new PainfulWoundEffect(100));
+        enemy.AddDebuff(new PainfulWoundEffect(100));
         Debug.Log($"Applying painful wound to {enemy}");
         // 출혈 상태 추가 및 턴마다 피해 로직
     }
@@ -60,6 +60,7 @@ public class DeviceDestructionBomb : Skill // 범용: 장치 파괴 폭탄
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
+        enemy.diceReduce += 3;
         Debug.Log($"Target {enemy} will have their action roll reduced by 3 next turn.");
         // 타겟의 행동 판정에 영향을 주는 로직 추가
         // 예를 들어, 행동 판정 값을 추적하는 시스템에서 값 감소 처리

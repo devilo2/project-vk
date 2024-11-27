@@ -12,6 +12,7 @@ using UnityEngine.UI;
 public class BattleManager : MonoBehaviour
 {
     PlayerData playerData; //플레이어 데이터
+    Judgment judgment;
 
     public delegate void BattleEndedHandler();
     public event BattleEndedHandler OnBattleEnded;
@@ -76,6 +77,7 @@ public class BattleManager : MonoBehaviour
     {
         //플레이어 데이터 초기화
         playerData = GameObject.Find("PlayerManager").GetComponent<PlayerData>();
+        judgment = GameObject.Find("Judgement Manger").GetComponent<Judgment>();
         curBattleStatus = BattleStatus.PlotSelect;
         waitJudgment = false;
         enterKey = false;
