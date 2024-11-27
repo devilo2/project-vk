@@ -18,6 +18,9 @@ public class PlayerData : MonoBehaviour
     private List<object> keyItems;
     private Skill[] skill;
 
+    private bool damagePass = false;
+    private int damageReduce = 0;
+
     //½ºÅÈ
     public const int STATUS_X_MAX = 6; // ½ºÅÈÀÇ X Å©±â (¿¹: ½ºÅÈ ¸ÊÀÇ °¡·Î Å©±â)Assets/Scripts/PlayerDataManager/CharaterManger/PlayerData.cs
     public const int STATUS_Y_MAX = 9; // ½ºÅÈÀÇ Y Å©±â (¿¹: ½ºÅÈ ¸ÊÀÇ ¼¼·Î Å©±â)
@@ -167,8 +170,17 @@ public class PlayerData : MonoBehaviour
     }
 
     //numÀÇ È½¼ö ¸¸Å­ ·£´ýÇÑ Ã¼·ÂÀ» ±ï´Â´Ù.
-    void Damaged(int num)
+    public void Damaged(int num)
     {
+        if(damagePass)
+        {
+            damagePass = false;
+            return;
+        }
+
+        num = num - damageReduce;
+        damageReduce = 0;
+
         for (int i = 0; i < num; i++)
         {
             if (Health.Count <= 0)

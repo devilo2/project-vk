@@ -7,7 +7,8 @@ public class Enemy
     public string Name { get; private set; } //적의 이름
     public string Tag { get; private set; }
     public int HP { get; private set; } //적의 체력
-
+    private Debuff debuff;
+    
     public Enemy(string name, int hp)
     {
         Name = name;

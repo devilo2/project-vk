@@ -71,7 +71,7 @@ public class Judgment : MonoBehaviour
 
 
     // 주사위 값과 스탯 이름을 기반으로 판정 결과를 반환
-    public void SetJudgeResult(string name, int dice)
+    public JudgeResult SetJudgeResult(string name, int dice)
     {
         LastJudgeStatName = name; // 마지막 판정된 스탯 이름 저장
         GetJudgeNum(name); // 판정 기준 값 계산
@@ -95,6 +95,8 @@ public class Judgment : MonoBehaviour
         {
             Result = JudgeResult.Fail; // 그 외의 경우 실패
         }
+
+        return Result;
     }
 
     

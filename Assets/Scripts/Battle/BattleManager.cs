@@ -296,11 +296,12 @@ public class BattleManager : MonoBehaviour
        yield return new WaitUntil(() => playerData.Judgeresult != Judgment.JudgeResult.None);
 
         //판정 후 결과에 따라 코스트 차감 및 스킬 사용
-        if (playerData.Judgeresult == Judgment.JudgeResult.Success)
+        if (playerData.Judgeresult >= Judgment.JudgeResult.Success)
         {
             curCost -= skill.Cost;
+            skill.UseSkill(enemies[SelectedEnemyNum], playerData.Judgeresult); //스킬 사용
             playerData.Judgeresult = Judgment.JudgeResult.None;
-            skill.UseSkill(enemies[SelectedEnemyNum]); //스킬 사용
+
             // 공격 스킬인 경우 턴 종료, 아닌 경우 대기 상태로 돌아감
             if (skill.Type == Skill.SkillType.Attack)
             {
