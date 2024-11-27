@@ -21,6 +21,7 @@ public class UIManager : MonoBehaviour
     private Button currentButton;        // 현재 선택된 버튼
 
     private BattleManager battleManager;
+    private spawnplayer spawnplayer;
 
     void Start()
     {
@@ -30,6 +31,8 @@ public class UIManager : MonoBehaviour
 
         // BattleManager 연결
         battleManager = FindObjectOfType<BattleManager>();
+
+        spawnplayer = FindObjectOfType<spawnplayer>();
 
         // Plot 선택 초기화
         HighlightPlotButton(selectedPlot);
@@ -75,6 +78,10 @@ public class UIManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Return)) // 선택 확인
         {
             OnPlotSelected(selectedPlot + 1);
+            if (spawnplayer != null)
+            {
+                spawnplayer.spawn();
+            }
         }
     }
 
@@ -204,8 +211,7 @@ public class UIManager : MonoBehaviour
     // Battle이 끝난 후 Plot 선택 화면으로 돌아가기
     void OnBattleEnded()
     {
-        plotSelectionUI.SetActive(true); // Plot 선택 화면 활성화
-        battleUI.SetActive(false);       // Battle UI 비활성화
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     // 이전 버튼 하이라이트 제거

@@ -154,6 +154,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Health: 010000000200000003000000040000000500000006000000
   DamagedHealth: 
+  OverchargeUsed: 0
+  damagePass: 0
+  damageReduce: 0
 --- !u!4 &545663545
 Transform:
   m_ObjectHideFlags: 0
@@ -211,6 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b848d4b09f7c65f42bb3e913d53c1cda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  diceReduce: 0
 --- !u!4 &567195330
 Transform:
   m_ObjectHideFlags: 0
@@ -334,7 +338,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &701757447
 Transform:
   m_ObjectHideFlags: 0
@@ -378,7 +382,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &756016792
 MonoBehaviour:
   m_ObjectHideFlags: 0
