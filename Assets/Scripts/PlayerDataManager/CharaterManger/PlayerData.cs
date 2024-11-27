@@ -17,6 +17,9 @@ public class PlayerData : MonoBehaviour
     private Item[] items;
     private List<object> keyItems;
     private Skill[] skill;
+    public List<Debuff> debuffs = new List<Debuff>();
+    public bool OverchargeUsed = false;
+
 
     public bool damagePass = false;
     public int damageReduce = 0;
@@ -252,7 +255,10 @@ public class PlayerData : MonoBehaviour
         skill = new Skill[] {testSkill1, testSkill2};
     }
 
-        
+    public void AddDebuff(Debuff debuff)
+    {
+        debuffs.Add(debuff);
+    }
 
     // Update is called once per frame
     void Update()

@@ -10,7 +10,12 @@ public class Enemy
     private List<Debuff> debuffs;
     public int diceReduce = 0;
     public Judgment judgment;
+    public int plot;
 
+    public void SetPlot()
+    {
+        plot = Random.Range(1, 6);
+    }
     public Enemy(string name, int hp)
     {
         Name = name;
@@ -42,7 +47,7 @@ public class Enemy
                 debuffs.Remove(debuff);
             }
         }
-        int plot = Random.Range(1, 6);
+        SetPlot();
         Debug.Log($"Enemy: enemy plot:{plot}");
     }
 

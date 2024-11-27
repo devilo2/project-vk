@@ -127,6 +127,8 @@ public class TrajectoryCalculation : Skill // 오토마톤: 궤적 계산
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
+        Judgment judgment = GameObject.Find("Judgement Manger").GetComponent<Judgment>();
+        judgment.diceReduce -= 4;
         Debug.Log("Trajectory Calculation activated, increasing the accuracy of ranged attacks by 4 this turn.");
         // 사격전 공격 스킬의 판정을 증가시키는 로직 추가
     }
@@ -137,6 +139,9 @@ public class Overcharge : Skill // 오토마톤: 과충전
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
+        playerData.OverchargeUsed = true;
+        playerData.RandomHeal(6);
+        playerData.AddDebuff(new OverchargeEffect(100));
         Debug.Log("Overcharge used, restoring HP to 6 but causing 2 HP loss every turn.");
         // 체력 복구 및 매 턴 체력 감소 로직 추가
     }
@@ -169,6 +174,7 @@ public class Beastification : Skill // 수인: 야수화
         // 근접 데미지 증가 로직 추가
     }
 }
+
 public class HuntingTime : Skill // 수인: 사냥의 시간
 {
     public HuntingTime() : base("사냥의 시간", 2, SkillType.Device, "의기", 2) { }

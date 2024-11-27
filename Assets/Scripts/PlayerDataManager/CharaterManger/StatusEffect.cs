@@ -67,3 +67,15 @@ public class PainfulWoundEffect : Debuff
         reduceDuration();
     }
 }
+
+public class OverchargeEffect : Debuff
+{
+    public OverchargeEffect(int duration) : base(duration, "°úÃæÀü")
+    {
+    }
+
+    public override void ApplyEffect(PlayerData playerData)
+    {
+        playerData.Damaged(2);
+    }
+}

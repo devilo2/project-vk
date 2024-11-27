@@ -88,11 +88,15 @@ public class BattleManager : MonoBehaviour
         toolNum = 0;
         SelectedEnemyNum = 0;
         energyAmplification = false;
-
+        playerData.OverchargeUsed = false;
         //테스트 적
         enemies[0] = new Enemy("적1", 10);
         enemies[1] = new Enemy("적2", 10);
         enemies[2] = new Enemy("적3", 10); 
+        for (int i = 0; i < enemyMax; i++)
+        {
+            enemies[i].SetPlot();
+        }
     }
 
     // Update is called once per frame
@@ -117,6 +121,7 @@ public class BattleManager : MonoBehaviour
             case BattleStatus.PlayerTurn:
                 if(curPlayerTurnStatus == PlayerTurnStatus.End)
                 {
+                    judgment.diceReduce = 0;
                     curBattleStatus = BattleStatus.EnemyTurn;
                 }
                 break;
@@ -276,6 +281,11 @@ public class BattleManager : MonoBehaviour
             case PlayerTurnStatus.Use:
                 // 선택된 스킬을 가져와서 선택된 적에게 사용
                 //skill.DesignatedAttribute;
+                if(Mathf.Abs(enemies[SelectedEnemyNum].plot - playerPlot) <= playerData.getSkill(skillNum).Range)
+                {
+                    curPlayerTurnStatus = PlayerTurnStatus.Idle;
+                    break;
+                }
                 if(!waitJudgment)
                 {
                     waitJudgment = true;
