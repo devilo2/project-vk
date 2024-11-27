@@ -18,8 +18,8 @@ public class PlayerData : MonoBehaviour
     private List<object> keyItems;
     private Skill[] skill;
 
-    private bool damagePass = false;
-    private int damageReduce = 0;
+    public bool damagePass = false;
+    public int damageReduce = 0;
 
     //Ω∫≈»
     public const int STATUS_X_MAX = 6; // Ω∫≈»¿« X ≈©±‚ (øπ: Ω∫≈» ∏ ¿« ∞°∑Œ ≈©±‚)Assets/Scripts/PlayerDataManager/CharaterManger/PlayerData.cs

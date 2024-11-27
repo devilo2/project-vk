@@ -7,7 +7,7 @@ public class Enemy
     public string Name { get; private set; } //적의 이름
     public string Tag { get; private set; }
     public int HP { get; private set; } //적의 체력
-    private Debuff debuff;
+    private List<Debuff> debuffs;
     
     public Enemy(string name, int hp)
     {
@@ -23,6 +23,14 @@ public class Enemy
     public void EnemyTurn(int playerPlot)
     {
         //임의의 플롯을 선택해 거리에 따라 스킬 사용
+        foreach(Debuff debuff in debuffs)
+        {
+            debuff.ApplyEffect(this);
+            if(debuff.duration <= 0)
+            {
+                debuffs.Remove(debuff);
+            }
+        }
         int plot = Random.Range(1, 6);
         Debug.Log($"Enemy: enemy plot:{plot}");
     }

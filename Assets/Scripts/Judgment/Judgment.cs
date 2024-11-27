@@ -69,7 +69,10 @@ public class Judgment : MonoBehaviour
         }
     }
 
-
+    public void SetLastJudgeStatName(string name)
+    {
+        LastJudgeStatName = name;
+    }
     // 주사위 값과 스탯 이름을 기반으로 판정 결과를 반환
     public JudgeResult SetJudgeResult(string name, int dice)
     {

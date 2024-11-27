@@ -37,6 +37,7 @@ public class MeleeAttack : Skill // 공통: 접근전 공격(일반 공격)
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
+        enemy.EnemyDamage(1);
         Debug.Log($"Dealing 1 damage to {enemy}");
         // 여기서 target에 대해 1의 피해를 주는 로직을 추가
     }
@@ -48,6 +49,7 @@ public class PainfulWound : Skill // 범용: 고통스러운 상처
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
+        enemy.Debuffs.Add(new PainfulWoundEffect(100));
         Debug.Log($"Applying painful wound to {enemy}");
         // 출혈 상태 추가 및 턴마다 피해 로직
     }
@@ -71,6 +73,7 @@ public class EnergyEmitter : Skill // 범용: 에너지 방출포
     {
         bool isGiant = enemy.Tag == "Giant"; ; // "거대" 태그가 붙은 경우
         int damage = isGiant ? 3 : 1;
+        enemy.EnemyDamage(damage);
         Debug.Log($"Firing energy emitter at {enemy}, dealing {damage} damage.");
         // 피해를 주는 로직 추가
     }
@@ -81,9 +84,9 @@ public class SurvivalStrategy : Skill // 인간: 생존 전략
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
-        if(playerData.Health.count == 1)
+        if(playerData.Health.Count == 1)
         {
-            playerData.DamagePass = true;
+            playerData.damagePass = true;
         }
         Debug.Log("Survival Strategy activated. If HP is reduced to 1, no damage will be taken this turn.");
         // 체력 감소 시 데미지를 막는 로직 추가
@@ -107,13 +110,16 @@ public class Swordsmanship : Skill // 인간: 마검술
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
-        bool isSpecial = judgeResult == Judgement.JudgeResult.Special;
+        bool isSpecial = judgeResult == Judgment.JudgeResult.Special;
         int damage = isSpecial ? 3 : 2;
-        enemy.Damaged(damage);
+        enemy.EnemyDamage(damage);
         Debug.Log($"Swordsmanship used on {enemy}, dealing {damage} damage.");
         // 스페셜 판정과 데미지 계산 로직 추가
     }
 }
+
+//------------구현 완료--------------
+
 public class TrajectoryCalculation : Skill // 오토마톤: 궤적 계산
 {
     public TrajectoryCalculation() : base("궤적 계산", 3, SkillType.Device, "기계조작술", 3) { }

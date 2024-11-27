@@ -290,7 +290,9 @@ public class BattleManager : MonoBehaviour
     private IEnumerator WaitForJudgment()
     {
         Skill skill = playerData.getSkill(skillNum);
+        judgment.SetLastJudgeStatName(skill.DesignatedAttribute);
         SceneManager.LoadScene("Judgment", LoadSceneMode.Additive);
+
 
         //판정씬을 대기
        yield return new WaitUntil(() => playerData.Judgeresult != Judgment.JudgeResult.None);
@@ -369,7 +371,7 @@ public class BattleManager : MonoBehaviour
         Skill selectedSkill = playerData.getSkill(skillIndex);
 
         // 스킬 효과 적용
-        selectedSkill.UseSkill(enemies[SelectedEnemyNum]);
+        selectedSkill.UseSkill(enemies[SelectedEnemyNum], playerData.Judgeresult);
     }
     public void UseTool(int toolIndex)
     {
