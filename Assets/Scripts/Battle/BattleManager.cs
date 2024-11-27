@@ -11,6 +11,7 @@ using UnityEngine.UI;
 
 public class BattleManager : MonoBehaviour
 {
+    public EnemySpawn enemySpawn; // EnemySpawner 인스턴스
     PlayerData playerData; //플레이어 데이터
     Judgment judgment;
 
@@ -28,7 +29,7 @@ public class BattleManager : MonoBehaviour
 
     ToolOrSkill curToolOrSkill = ToolOrSkill.Tool; //현재 도구 또는 스킬 모드
 
-    const int enemyMax = 3; //적 최대 수
+    const int enemyMax = 1; //적 최대 수
 
     Enemy[] enemies = new Enemy[enemyMax]; 
     int SelectedEnemyNum = 0; //선택된 적 번호
@@ -90,13 +91,13 @@ public class BattleManager : MonoBehaviour
         energyAmplification = false;
         playerData.OverchargeUsed = false;
         //테스트 적
-        enemies[0] = new Enemy("적1", 10);
-        enemies[1] = new Enemy("적2", 10);
-        enemies[2] = new Enemy("적3", 10); 
+        enemies[0] = new Enemy("고대골렘", 7);
         for (int i = 0; i < enemyMax; i++)
         {
             enemies[i].SetPlot();
         }
+        // 적 소환
+        enemySpawn.SpawnEnemies(enemies); // EnemySpawner를 통해 적을 소환
     }
 
     // Update is called once per frame
