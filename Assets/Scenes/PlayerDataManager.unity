@@ -152,6 +152,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34739e0f96156354080aaa701be51092, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Health: 010000000200000003000000040000000500000006000000
+  DamagedHealth: 
+  OverchargeUsed: 0
+  damagePass: 0
+  damageReduce: 0
 --- !u!4 &545663545
 Transform:
   m_ObjectHideFlags: 0
@@ -209,7 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b848d4b09f7c65f42bb3e913d53c1cda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BodyDice: {fileID: 0}
+  diceReduce: 0
 --- !u!4 &567195330
 Transform:
   m_ObjectHideFlags: 0
@@ -317,6 +322,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 572455676}
   m_CullTransparentMesh: 1
+--- !u!1 &701757446
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 701757447}
+  - component: {fileID: 701757448}
+  m_Layer: 0
+  m_Name: ChangeToJudgementScene
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &701757447
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 701757446}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1377207959}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &701757448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 701757446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0903ef0f06b8d6342b1ff7de3ba9288b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &756016791
 GameObject:
   m_ObjectHideFlags: 0
@@ -494,6 +543,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 756016793}
+  - {fileID: 701757447}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1399126019

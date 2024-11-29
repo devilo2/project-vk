@@ -29,7 +29,7 @@ public class Selecting : MonoBehaviour
 
     const int MAX_STATUS_SELECT = 6;
     int selected_status_num = 0;
-    Boolean[,] selectedStatus = new Boolean[Judgment.STATUS_X_MAX+1, Judgment.STATUS_Y_MAX+1];
+    Boolean[,] selectedStatus = new Boolean[PlayerData.STATUS_X_MAX+1, PlayerData.STATUS_Y_MAX+1];
 
     private void Start()
     {
@@ -51,9 +51,9 @@ public class Selecting : MonoBehaviour
         //}
 
         GameObject statusUIPar = GameObject.Find("Canvas").transform.Find("Status").gameObject;
-        for (int i = 1; i <= Judgment.STATUS_X_MAX; i++)
+        for (int i = 1; i <= PlayerData.STATUS_X_MAX; i++)
         {
-            for (int j = 1; j <= Judgment.STATUS_Y_MAX; j++)
+            for (int j = 1; j <= PlayerData.STATUS_Y_MAX; j++)
             {
                 GameObject statusUI = statusUIPar.transform.Find(i.ToString()).transform.Find(j.ToString()).gameObject;
                 int indexX = i;
@@ -73,7 +73,7 @@ public class Selecting : MonoBehaviour
         {
             if (selected_status_num < MAX_STATUS_SELECT)
             {
-                Debug.Log($"Selecting {judgment.GetStatusName(x, y)} 선택");
+                Debug.Log($"Selecting {playerData.GetStatusName(x, y)} 선택");
                 selectedStatus[x, y] = true;
                 selected_status_num++;
             }
@@ -82,7 +82,7 @@ public class Selecting : MonoBehaviour
         {
             if (selected_status_num > 0)
             {
-                Debug.Log($"Selecting {judgment.GetStatusName(x, y)} 취소");
+                Debug.Log($"Selecting {playerData.GetStatusName(x, y)} 취소");
                 selectedStatus[x, y] = false;
                 selected_status_num--;
             }
@@ -91,13 +91,13 @@ public class Selecting : MonoBehaviour
 
     public void StoreStat()
     {
-        for (int i = 1; i <= Judgment.STATUS_X_MAX; i++)
+        for (int i = 1; i <= PlayerData.STATUS_X_MAX; i++)
         {
-            for (int j = 1; j <= Judgment.STATUS_Y_MAX; j++)
+            for (int j = 1; j <= PlayerData.STATUS_Y_MAX; j++)
             {
                 if (selectedStatus[i, j])
                 {
-                   judgment.AddStat(i, j);
+                   playerData.AddStat(i, j);
                 }
             }
         }

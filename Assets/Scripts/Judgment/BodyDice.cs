@@ -45,6 +45,11 @@ public class BodyDice : MonoBehaviour
             dice = 0;
         }
     }
+    // 이전 스탯에 대해 다시 판정
+    public void ReJudge()
+    {
+        RollDice(); // 주사위 다시 굴리기
+    }
 
     // 주사위를 굴리는 코루틴
     private IEnumerator RollTheDice()
@@ -66,11 +71,13 @@ public class BodyDice : MonoBehaviour
         dice += randomDiceSide1 + randomDiceSide2 + 2;
         resultText.text = "주사위 합: " + dice.ToString(); // 주사위 합을 UI 텍스트로 표시
 
-        string statName = "사격"; // 임의의 스탯 이름 (UI에서 입력 가능한 스탯 이름으로 변경 가능)
+        string statName = judgment.LastJudgeStatName; // 임의의 스탯 이름 (UI에서 입력 가능한 스탯 이름으로 변경 가능)
         Judge(statName, dice); // 판정을 위한 메서드 호출
 
         isRolling = false; // 주사위 굴리는 상태를 종료
     }
+
+
 
     // 판정 로직을 처리하는 메서드
     private void Judge(string statName, int dice)

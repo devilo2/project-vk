@@ -4,11 +4,18 @@ using UnityEngine;
 
 public class Enemy
 {
-    public string Name { get; private set; }
+    public string Name { get; private set; } //적의 이름
     public string Tag { get; private set; }
-    public int HP { get; private set; }
+    public int HP { get; private set; } //적의 체력
+    private List<Debuff> debuffs;
+    public int diceReduce = 0;
+    public Judgment judgment;
+    public int plot;
 
-
+    public void SetPlot()
+    {
+        plot = Random.Range(1, 6);
+    }
     public Enemy(string name, int hp)
     {
         Name = name;
@@ -18,11 +25,52 @@ public class Enemy
     {
         Tag = tag;
     }
-    // Start is called before the first frame update
-    
-    public abstract void EnemyTurn(int playerPlot)
+    public void AddDebuff(Debuff debuff)
     {
-        int plot = Random.Range(1, 6);
+        debuffs.Add(debuff);
+    }
+
+    //적 턴 처리 코드
+    public void EnemyTurn(int playerPlot)
+    {
+        judgment = GameObject.Find("Judgement Manger").GetComponent<Judgment>();
+        if(diceReduce > 0)
+        {
+            judgment.diceReduce = diceReduce;
+        }
+        //임의의 플롯을 선택해 거리에 따라 스킬 사용
+        foreach(Debuff debuff in debuffs)
+        {
+            debuff.ApplyEffect(this);
+            if(debuff.duration <= 0)
+            {
+                debuffs.Remove(debuff);
+            }
+        }
+        SetPlot();
         Debug.Log($"Enemy: enemy plot:{plot}");
+    }
+
+    //적에게 데미지를 줌
+    public void EnemyDamage(int damage)
+    {
+        HP -= damage;
+        if (HP <= 0)
+        {
+            HP = 0;
+            DieEvent();
+        }
+    }
+
+    //적애게 치유를 함
+    public void EnemyHeal(int heal)
+    {
+        HP += heal;
+    }
+
+    //적이 죽었을 때의 처리
+    public void DieEvent()
+    {
+        Debug.Log($"{Name} 처치");
     }
 }
