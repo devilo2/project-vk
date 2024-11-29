@@ -21,8 +21,13 @@ public class Skill
         Type = type;
         DesignatedAttribute = designatedAttribute;
         Range = range;
+
+    }
+    public void InitializePlayerData()
+    {
         playerData = GameObject.Find("PlayerManager").GetComponent<PlayerData>();
     }
+
 
     // 기본적으로 모든 스킬은 UseSkill을 가짐
     public virtual void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)

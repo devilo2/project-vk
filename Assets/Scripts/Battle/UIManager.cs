@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     [Header("Plot Selection UI References")]
     public GameObject plotSelectionUI;  // Plot 선택 UI 패널
     public GameObject battleUI;         // Battle UI 패널
+    public GameObject enemyselectUI;    // 적 패널 
     public Button[] plotButtons;        // Plot 선택 버튼들 (6개)
     private int selectedPlot = 0;       // 현재 선택된 Plot 인덱스 (0부터 5까지)
 
@@ -20,6 +21,12 @@ public class UIManager : MonoBehaviour
     private int currentIndex = 0;        // 현재 카테고리 내의 버튼 인덱스
     private Button currentButton;        // 현재 선택된 버튼
 
+    [Header("Enemy Selection UI References")]
+    public GameObject[] enemySelectionButtons;   // UI 버튼으로 각 적을 선택
+    public Text selectedEnemyText;               // 선택된 적을 표시할 텍스트
+    private int selectedEnemyNum = 0;            // 현재 선택된 적의 인덱스
+    private int enemyMax = 5;                    // 적의 최대 개수 (예시로 5개로 설정, 필요에 따라 수정)
+
     private BattleManager battleManager;
     private spawnplayer spawnplayer;
 
@@ -28,10 +35,10 @@ public class UIManager : MonoBehaviour
         // 초기 상태 설정
         plotSelectionUI.SetActive(true);
         battleUI.SetActive(false);
+        enemyselectUI.SetActive(false);
 
         // BattleManager 연결
         battleManager = FindObjectOfType<BattleManager>();
-
         spawnplayer = FindObjectOfType<spawnplayer>();
 
         // Plot 선택 초기화
@@ -42,6 +49,9 @@ public class UIManager : MonoBehaviour
 
         // BattleManager에게 턴 종료 후 Plot 선택 UI로 돌아가라고 알림
         battleManager.OnBattleEnded += OnBattleEnded;
+
+        // 초기 적 선택 UI 설정
+        UpdateEnemySelectionUI();
     }
 
     void Update()
@@ -53,6 +63,11 @@ public class UIManager : MonoBehaviour
         else if (battleUI.activeSelf)
         {
             HandleBattleUI();
+            
+        }
+        else if (enemyselectUI.activeSelf)
+        {
+            HandleEnemySelection();  // 적 선택 처리
         }
 
         if (Input.GetKeyDown(KeyCode.Tab))
@@ -120,7 +135,33 @@ public class UIManager : MonoBehaviour
         }
     }
 
-        // Plot 버튼 하이라이트 처리
+    // 적 선택 처리
+    void HandleEnemySelection()
+    {
+        // W/S 키로 이전/다음 적 선택
+        if (Input.GetKeyDown(KeyCode.W) && selectedEnemyNum > 0)  // W 키로 이전 적 선택
+        {
+            selectedEnemyNum--;
+            UpdateEnemySelectionUI();  // UI 업데이트
+            Debug.Log($"Selected Enemy: {selectedEnemyNum}");
+        }
+        else if (Input.GetKeyDown(KeyCode.S) && selectedEnemyNum < enemyMax - 1)  // S 키로 다음 적 선택
+        {
+            selectedEnemyNum++;
+            UpdateEnemySelectionUI();  // UI 업데이트
+            Debug.Log($"Selected Enemy: {selectedEnemyNum}");
+        }
+
+        // Return 키로 선택된 적 확정
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            Debug.Log($"Enemy {selectedEnemyNum + 1} selected for action.");
+            // 선택된 적에 대한 행동을 추가하는 코드 (예: 공격)
+            OnEnemySelected();  // 적 선택 완료 후 처리
+        }
+    }
+
+    // Plot 버튼 하이라이트 처리
     void HighlightPlotButton(int index)
     {
         for (int i = 0; i < plotButtons.Length; i++)
@@ -177,6 +218,7 @@ public class UIManager : MonoBehaviour
         Debug.Log($"Selected Plot: {plot}");
         plotSelectionUI.SetActive(false);
         battleUI.SetActive(true);
+        enemyselectUI.SetActive(true); // 적 선택 UI 활성화
 
         battleManager.InitializeBattle(plot);
         HighlightButton(GetCurrentButton()); // Battle UI의 첫 버튼 하이라이트
@@ -195,6 +237,8 @@ public class UIManager : MonoBehaviour
             case 1: // Skill
                 Debug.Log($"Skill Selected: Index {currentIndex}");
                 battleManager.UseSkill(currentIndex); // Skill 인덱스를 전달
+                battleUI.SetActive(false);  // Battle UI 비활성화
+                enemyselectUI.SetActive(true); // 적 선택 UI 활성화
                 break;
 
             case 2: // NextTurn
@@ -206,7 +250,7 @@ public class UIManager : MonoBehaviour
                 Debug.LogError("Invalid Battle Option");
                 break;
         }
-    }   
+    }
 
     // Battle이 끝난 후 Plot 선택 화면으로 돌아가기
     void OnBattleEnded()
@@ -223,4 +267,39 @@ public class UIManager : MonoBehaviour
         colors.normalColor = Color.white; // 기본 색상 (흰색)
         button.colors = colors;
     }
+
+    // 선택된 적을 UI에 반영
+    void UpdateEnemySelectionUI()
+    {
+        // 선택된 적의 텍스트 표시
+        selectedEnemyText.text = $"Selected Enemy: {selectedEnemyNum + 1}";  // 적 번호 표시
+
+        // 적 버튼 강조 (현재 선택된 적 버튼만 강조)
+        for (int i = 0; i < enemySelectionButtons.Length; i++)
+        {
+            Button button = enemySelectionButtons[i].GetComponent<Button>();
+            ColorBlock colors = button.colors;
+
+            if (i == selectedEnemyNum)
+            {
+                colors.normalColor = Color.yellow; // 선택된 버튼은 노란색으로 강조
+            }
+            else
+            {
+                colors.normalColor = Color.white;  // 나머지 버튼은 기본 색상
+            }
+
+            button.colors = colors;
+
+            // 버튼 활성화/비활성화 처리 (선택된 상태일 때만 활성화)
+            button.interactable = i == selectedEnemyNum;  // 선택된 버튼만 상호작용 가능
+        }
+    }
+
+    // 적 선택 완료 후 처리
+    void OnEnemySelected()
+    {
+        battleUI.SetActive(true); // Battle UI 활성화
+    }
 }
+

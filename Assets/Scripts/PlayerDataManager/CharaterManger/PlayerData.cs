@@ -248,11 +248,11 @@ public class PlayerData : MonoBehaviour
         availableStatuses = havingStatuses.ToList(); // 활성화된 스탯 리스트를 가진 스탯 리스트로 초기화
 
         //테스트 코드
-        Skill testSkill1 = new Skill("테스트 스킬", 2, Skill.SkillType.Attack, "사격", 3);
-        Skill testSkill2 = new Skill("테스트 스킬2", 6, Skill.SkillType.Support, "방어마술", 1);
+        Skill meleeAttack = new MeleeAttack();
+        Skill testSkill2 = new Skill("테스트 스킬2", 4, Skill.SkillType.Support, "방어마술", 1);
 
 
-        skill = new Skill[] {testSkill1, testSkill2};
+        skill = new Skill[] {meleeAttack, testSkill2};
     }
 
     public void AddDebuff(Debuff debuff)

@@ -19,7 +19,7 @@ public class BattleManager : MonoBehaviour
     public event BattleEndedHandler OnBattleEnded;
     public int playerPlot = 1; //플롯
     int curCost = 0; //현재 코스트
-
+    public static int battleturn = 0;
 
     BattleStatus curBattleStatus = BattleStatus.None; //현재 전투 상태
     PlayerTurnStatus curPlayerTurnStatus = PlayerTurnStatus.Idle; //플레이어 턴 상태
@@ -98,6 +98,7 @@ public class BattleManager : MonoBehaviour
         }
         // 적 소환
         enemySpawn.SpawnEnemies(enemies); // EnemySpawner를 통해 적을 소환
+        battleturn += 1;
     }
 
     // Update is called once per frame
