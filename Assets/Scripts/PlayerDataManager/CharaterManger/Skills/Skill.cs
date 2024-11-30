@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 public class Skill
@@ -123,9 +124,6 @@ public class Swordsmanship : Skill // 인간: 마검술
         // 스페셜 판정과 데미지 계산 로직 추가
     }
 }
-
-//------------구현 완료--------------
-
 public class TrajectoryCalculation : Skill // 오토마톤: 궤적 계산
 {
     public TrajectoryCalculation() : base("궤적 계산", 3, SkillType.Device, "기계조작술", 3) { }
@@ -153,15 +151,31 @@ public class Overcharge : Skill // 오토마톤: 과충전
 }
 public class ThunderSpear : Skill // 오토마톤: 뇌창(썬더스피어)
 {
+    private int lastUsedTurn = -1; // 마지막 사용된 턴 (-1은 사용되지 않았음을 의미)
+    private int cooldownTurns = 1; // 스킬 쿨다운(다음 턴에는 사용 불가)
+
     public ThunderSpear() : base("뇌창", 2, SkillType.Attack, "사격", 4) { }
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
-        bool canAttack = /* 거리 계산 후 공격 가능한지 여부 */ true;
+        int currentTurn = BattleManager.battleturn; // BattleManager에서 현재 턴 가져오기
+
+        // 쿨다운 확인
+        if (currentTurn <= lastUsedTurn + cooldownTurns)
+        {
+            Debug.Log("Thunder Spear is on cooldown. Can use again on next turn.");
+            return;
+        }
+
+        // 거리 계산 (이 부분은 가정으로 설정)
+        bool canAttack = true; // 예: 거리 계산 로직에 따라 결정
         if (canAttack)
         {
-            Debug.Log($"Brain Spear used on {enemy}, dealing 3 damage.");
-            // 타겟에게 데미지를 주는 로직 추가
+            enemy.EnemyDamage(3);
+            Debug.Log($"Thunder Spear used on {enemy}, dealing 3 damage.");
+
+            // 스킬 사용 후 현재 턴 저장
+            lastUsedTurn = currentTurn;
         }
         else
         {
@@ -169,17 +183,40 @@ public class ThunderSpear : Skill // 오토마톤: 뇌창(썬더스피어)
         }
     }
 }
-public class Beastification : Skill // 수인: 야수화
+
+public class Beastification : Skill
 {
+    public static bool beastMode = false; // 현재 야수화 상태 여부
+    private int activationTurn = -1; // 야수화가 활성화된 턴
+
     public Beastification() : base("야수화", 2, SkillType.Support, "이형화", 2) { }
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
+        // 현재 턴 가져오기
+        int currentTurn = BattleManager.battleturn;
+
+        // 야수화 활성화
+        beastMode = true;
+        activationTurn = currentTurn;
+
         Debug.Log("Beastification activated, increasing melee damage by 1 this turn.");
-        // 근접 데미지 증가 로직 추가
+    }
+
+    public void UpdateBeastMode()
+    {
+        // 현재 턴 가져오기
+        int currentTurn = BattleManager.battleturn;
+
+        // 야수화가 적용된 턴이 지나면 비활성화
+        if (beastMode && currentTurn > activationTurn)
+        {
+            beastMode = false;
+            Debug.Log("Beastification effect has ended.");
+        }
     }
 }
-
+// 사냥의 시간 빼고 전부 구현 완료
 public class HuntingTime : Skill // 수인: 사냥의 시간
 {
     public HuntingTime() : base("사냥의 시간", 2, SkillType.Device, "의기", 2) { }
