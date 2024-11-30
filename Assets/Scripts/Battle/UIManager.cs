@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using static System.Net.Mime.MediaTypeNames;
+using UnityEditor.Experimental.GraphView;
+using static BattleManager;
+
 
 public class UIManager : MonoBehaviour
 {
+    PlayerData playerData; //플레이어 데이터
     [Header("Plot Selection UI References")]
     public GameObject plotSelectionUI;  // Plot 선택 UI 패널
     public GameObject battleUI;         // Battle UI 패널
@@ -23,15 +28,16 @@ public class UIManager : MonoBehaviour
 
     [Header("Enemy Selection UI References")]
     public GameObject[] enemySelectionButtons;   // UI 버튼으로 각 적을 선택
-    public Text selectedEnemyText;               // 선택된 적을 표시할 텍스트
     private int selectedEnemyNum = 0;            // 현재 선택된 적의 인덱스
     private int enemyMax = 5;                    // 적의 최대 개수 (예시로 5개로 설정, 필요에 따라 수정)
 
     private BattleManager battleManager;
     private spawnplayer spawnplayer;
-
+    private bool waitJudgment = false; // 판정 대기 상태 플래그
+    PlayerTurnStatus curPlayerTurnStatus;
     void Start()
     {
+
         // 초기 상태 설정
         plotSelectionUI.SetActive(true);
         battleUI.SetActive(false);
@@ -56,6 +62,7 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
+
         if (plotSelectionUI.activeSelf)
         {
             HandlePlotSelection();
@@ -63,11 +70,12 @@ public class UIManager : MonoBehaviour
         else if (battleUI.activeSelf)
         {
             HandleBattleUI();
-            
+
         }
         else if (enemyselectUI.activeSelf)
         {
             HandleEnemySelection();  // 적 선택 처리
+
         }
 
         if (Input.GetKeyDown(KeyCode.Tab))
@@ -138,6 +146,7 @@ public class UIManager : MonoBehaviour
     // 적 선택 처리
     void HandleEnemySelection()
     {
+
         // W/S 키로 이전/다음 적 선택
         if (Input.GetKeyDown(KeyCode.W) && selectedEnemyNum > 0)  // W 키로 이전 적 선택
         {
@@ -253,10 +262,11 @@ public class UIManager : MonoBehaviour
     }
 
     // Battle이 끝난 후 Plot 선택 화면으로 돌아가기
-    void OnBattleEnded()
+    public void OnBattleEnded()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
 
     // 이전 버튼 하이라이트 제거
     void RemoveHighlightButton(Button button)
@@ -271,8 +281,6 @@ public class UIManager : MonoBehaviour
     // 선택된 적을 UI에 반영
     void UpdateEnemySelectionUI()
     {
-        // 선택된 적의 텍스트 표시
-        selectedEnemyText.text = $"Selected Enemy: {selectedEnemyNum + 1}";  // 적 번호 표시
 
         // 적 버튼 강조 (현재 선택된 적 버튼만 강조)
         for (int i = 0; i < enemySelectionButtons.Length; i++)
@@ -295,11 +303,56 @@ public class UIManager : MonoBehaviour
             button.interactable = i == selectedEnemyNum;  // 선택된 버튼만 상호작용 가능
         }
     }
-
     // 적 선택 완료 후 처리
     void OnEnemySelected()
     {
-        battleUI.SetActive(true); // Battle UI 활성화
+        if (waitJudgment) // 이미 대기 중이라면 중복 실행 방지
+        {
+            Debug.Log("이미 대기 중입니다.");
+            return;
+        }
+
+        waitJudgment = true;
+
+        BattleManager battleManager = GetComponent<BattleManager>();
+        if (battleManager == null)
+        {
+            Debug.LogError("BattleManager가 존재하지 않습니다!");
+            waitJudgment = false; // 예외 처리 후 플래그 리셋
+            return;
+        }
+
+        StartCoroutine(battleManager.WaitForJudgment());
+
+        if (curPlayerTurnStatus == PlayerTurnStatus.End)
+        {
+            OnBattleEnded(); // 전투 종료
+        }
+        else
+        {
+            battleUI.SetActive(true); // 전투 UI 활성화
+        }
+    }
+
+    void end()
+    {
+        
+        playerData = FindObjectOfType<PlayerData>();
+        battleManager = GetComponent<BattleManager>();
+        Skill skill = playerData.getSkill(BattleManager.skillNum);
+
+        if (skill.Type == Skill.SkillType.Attack)
+        {
+            OnBattleEnded();
+            if (curPlayerTurnStatus == PlayerTurnStatus.End)
+            {
+                OnBattleEnded();
+            }
+        }
+        else
+        {
+            battleUI.SetActive(true);
+        }
     }
 }
 

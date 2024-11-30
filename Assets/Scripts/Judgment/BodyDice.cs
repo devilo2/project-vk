@@ -16,7 +16,7 @@ public class BodyDice : MonoBehaviour
     private bool isRolling = false; // 주사위를 굴리는 중인지 여부를 확인하는 변수
 
     private void Start()
-    {
+    { 
         // 주사위 이미지를 초기화 (UI에서 할당된 이미지 가져오기)
         diceImage1 = diceImage1.GetComponent<Image>();
         diceImage2 = diceImage2.GetComponent<Image>();
@@ -54,9 +54,10 @@ public class BodyDice : MonoBehaviour
     // 주사위를 굴리는 코루틴
     private IEnumerator RollTheDice()
     {
+        
         int randomDiceSide1 = 0; // 첫 번째 주사위 면
         int randomDiceSide2 = 0; // 두 번째 주사위 면
-
+        
         // 주사위를 20번 굴리면서 화면에 랜덤 이미지 업데이트 (애니메이션 효과)
         for (int i = 0; i <= 20; i++)
         {

@@ -24,7 +24,7 @@ public class BattleManager : MonoBehaviour
     BattleStatus curBattleStatus = BattleStatus.None; //현재 전투 상태
     PlayerTurnStatus curPlayerTurnStatus = PlayerTurnStatus.Idle; //플레이어 턴 상태
 
-    int skillNum = 0; //스킬 번호
+    public static int skillNum = 0; //스킬 번호
     int toolNum = 0; //도구 번호
 
     ToolOrSkill curToolOrSkill = ToolOrSkill.Tool; //현재 도구 또는 스킬 모드
@@ -64,7 +64,7 @@ public class BattleManager : MonoBehaviour
     }
 
     //플레이어의 현재 상태
-    enum PlayerTurnStatus
+    public enum PlayerTurnStatus
     {
         Idle, //스킬 고르기
         EnemySelect, //적 선택 
@@ -301,7 +301,7 @@ public class BattleManager : MonoBehaviour
     }
 
     //판정씬을 불러오고 판정결과를 기다림
-    private IEnumerator WaitForJudgment()
+    public IEnumerator WaitForJudgment()
     {
         Skill skill = playerData.getSkill(skillNum);
         judgment.SetLastJudgeStatName(skill.DesignatedAttribute);
@@ -333,12 +333,25 @@ public class BattleManager : MonoBehaviour
     //적 턴 처리
     private void EnemyTurn()
     {
+        if (enemies == null || enemies.Length == 0)
+        {
+            Debug.LogError("enemies 배열이 초기화되지 않았거나 비어 있습니다!");
+            return;
+        }
+
         for (int i = 0; i < enemyMax; i++)
         {
-            enemies[i].EnemyTurn(playerPlot);
+            if (enemies[i] == null)
+            {
+                Debug.LogError($"enemies[{i}] 객체가 null입니다!");
+                continue;  // null인 객체는 넘기고, 다른 객체로 계속 진행
+            }
+
+            enemies[i].EnemyTurn(playerPlot);  // 적의 턴 처리
         }
-         curBattleStatus = BattleStatus.PlotSelect;
-         playerPlot = 1;
+
+        curBattleStatus = BattleStatus.PlotSelect;
+        playerPlot = 1;  // playerPlot을 1로 설정
     }
 
 
