@@ -29,7 +29,7 @@ public class UIManager : MonoBehaviour
     [Header("Enemy Selection UI References")]
     public GameObject[] enemySelectionButtons;   // UI 버튼으로 각 적을 선택
     private int selectedEnemyNum = 0;            // 현재 선택된 적의 인덱스
-    private int enemyMax = 5;                    // 적의 최대 개수 (예시로 5개로 설정, 필요에 따라 수정)
+    private int enemyMax = 1;                    // 적의 최대 개수 (예시로 5개로 설정, 필요에 따라 수정)
 
     private BattleManager battleManager;
     private spawnplayer spawnplayer;
@@ -253,6 +253,7 @@ public class UIManager : MonoBehaviour
             case 2: // NextTurn
                 Debug.Log("Next Turn Selected");
                 battleManager.EndPlayerTurn(); // 플레이어 턴 종료
+                battleManager.EnemyTurn();
                 break;
 
             default:
@@ -326,32 +327,11 @@ public class UIManager : MonoBehaviour
 
         if (curPlayerTurnStatus == PlayerTurnStatus.End)
         {
-            OnBattleEnded(); // 전투 종료
+            battleManager.EnemyTurn(); // 전투 종료
         }
         else
         {
             battleUI.SetActive(true); // 전투 UI 활성화
-        }
-    }
-
-    void end()
-    {
-        
-        playerData = FindObjectOfType<PlayerData>();
-        battleManager = GetComponent<BattleManager>();
-        Skill skill = playerData.getSkill(BattleManager.skillNum);
-
-        if (skill.Type == Skill.SkillType.Attack)
-        {
-            OnBattleEnded();
-            if (curPlayerTurnStatus == PlayerTurnStatus.End)
-            {
-                OnBattleEnded();
-            }
-        }
-        else
-        {
-            battleUI.SetActive(true);
         }
     }
 }

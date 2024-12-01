@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static BattleManager;
+using static Judgment;
 
 public class Enemy
 {
@@ -11,6 +13,9 @@ public class Enemy
     public int diceReduce = 0;
     public Judgment judgment;
     public int plot;
+    public PlayerData playerData;
+    public static int deamgReduce = 0;
+    public event BattleEndedHandler OnBattleEnded;
 
     public void SetPlot()
     {
@@ -33,28 +38,92 @@ public class Enemy
     //적 턴 처리 코드
     public void EnemyTurn(int playerPlot)
     {
-        judgment = GameObject.Find("Judgement Manger").GetComponent<Judgment>();
-        if(diceReduce > 0)
+        // Judgment Manager 컴포넌트 가져오기, null 체크
+        judgment = GameObject.Find("Judgement Manger")?.GetComponent<Judgment>();
+        playerData = GameObject.Find("PlayerManager")?.GetComponent<PlayerData>();
+        if (playerData == null)
+        {
+            Debug.LogError("PlayerData component not found!");
+        }
+        if (judgment == null)
+        {
+            Debug.LogError("Judgment Manager not found!");
+            return;
+        }
+
+
+        // 주사위 감소가 있을 경우 처리
+        if (diceReduce > 0)
         {
             judgment.diceReduce = diceReduce;
         }
-        //임의의 플롯을 선택해 거리에 따라 스킬 사용
-        foreach(Debuff debuff in debuffs)
+
+
+
+        if (Mathf.Abs(plot - playerPlot) <= 1)
         {
-            debuff.ApplyEffect(this);
-            if(debuff.duration <= 0)
+            int dice = Random.Range(1, 13);
+
+            if (judgment.SetJudgeResult("격투", dice) >= Judgment.JudgeResult.Success)
             {
-                debuffs.Remove(debuff);
+                playerData.Damaged(1);
+                Debug.Log("근접공격 성공");
             }
+            else
+            {
+                Debug.Log("근접공격 실패");
+            }
+            
+            OnBattleEnded?.Invoke();
+
         }
+        else if (Mathf.Abs(plot - playerPlot) == 2 && Mathf.Abs(plot - playerPlot) == 4)
+        {
+            int dice = Random.Range(1, 13);
+
+            if (judgment.SetJudgeResult("사격", dice) >= Judgment.JudgeResult.Success)
+            {
+                playerData.Damaged(2);
+                Debug.Log("사격공격 성공");
+            }
+            else
+            {
+                Debug.Log("사격공격 실패");
+            }
+            
+            OnBattleEnded?.Invoke();
+        }
+        else if (Mathf.Abs(plot - playerPlot) == 3)
+        {
+            int dice = Random.Range(1, 13);
+            if (judgment.SetJudgeResult("방어마술", dice) >= Judgment.JudgeResult.Success)
+            {
+                deamgReduce += 1;
+                Debug.Log("마력경화 성공");
+            }
+            else
+            {
+                Debug.Log("마력경화 실패");
+            }
+            OnBattleEnded?.Invoke();
+
+        }
+        else
+        {
+            OnBattleEnded?.Invoke();
+        }
+
+        // 적의 위치나 상태 설정
         SetPlot();
+
+        // 디버그 로그로 적의 위치 출력
         Debug.Log($"Enemy: enemy plot:{plot}");
     }
 
     //적에게 데미지를 줌
     public void EnemyDamage(int damage)
     {
-        HP -= damage;
+        HP -= damage - deamgReduce;
         if (HP <= 0)
         {
             HP = 0;

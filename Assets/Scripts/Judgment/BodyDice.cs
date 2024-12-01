@@ -89,9 +89,6 @@ public class BodyDice : MonoBehaviour
         // 판정 결과에 따라 UI 업데이트
         switch (result)
         {
-            case Judgment.JudgeResult.Pumble:
-                judgmentText.text = "펌블!!!"; // 펌블 결과 시 텍스트 표시
-                break;
             case Judgment.JudgeResult.Special:
                 judgmentText.text = "스페셜!!!"; // 스페셜 결과 시 텍스트 표시
                 break;
@@ -100,6 +97,9 @@ public class BodyDice : MonoBehaviour
                 break;
             case Judgment.JudgeResult.Fail:
                 judgmentText.text = "실패!!!"; // 실패 결과 시 텍스트 표시
+                break;
+            case Judgment.JudgeResult.Pumble:
+                judgmentText.text = "펌블!!!"; // 펌블 결과 시 텍스트 표시
                 break;
         }
     }
