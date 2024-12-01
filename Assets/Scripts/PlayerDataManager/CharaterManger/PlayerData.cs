@@ -31,7 +31,7 @@ public class PlayerData : MonoBehaviour
     //µµ±¸
     public static int EnableEnergy = 0;
     public static int ReturningGear = 1;
-    public static int SelfRecoveryPowerCapsule = 0;
+    public static int SelfRecoveryPowerCapsule = 3;
 
 
     public struct Status
