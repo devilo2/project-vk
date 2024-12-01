@@ -9,6 +9,8 @@ TagManager:
   - skill
   - persona
   - persona_select
+  - item
+  - item_select
   layers:
   - Default
   - TransparentFX
