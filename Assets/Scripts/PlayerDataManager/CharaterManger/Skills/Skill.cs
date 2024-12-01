@@ -48,7 +48,6 @@ public class MeleeAttack : Skill // 공통: 접근전 공격(일반 공격)
         if (judgeResult == Judgment.JudgeResult.Success || judgeResult == Judgment.JudgeResult.Special)
         {
             enemy.EnemyDamage(1);
-            battleManager.UpdateEnemyHpBar();
             Debug.Log($"Dealing 1 damage to {enemy}");
         }
         else {
@@ -100,13 +99,11 @@ public class EnergyEmitter : Skill // 범용: 에너지 방출포
             {
                 int damage = 3;
                 enemy.EnemyDamage(damage);
-                battleManager.UpdateEnemyHpBar();
                 Debug.Log($"Firing energy emitter at {enemy}, dealing {damage} damage.");
             }
             else
             {
                 enemy.EnemyDamage(1);
-                battleManager.UpdateEnemyHpBar();
                 Debug.Log($"Firing energy emitter at {enemy}, dealing 1 damage.");
             }
             Debug.Log("Fail");
@@ -165,7 +162,6 @@ public class Swordsmanship : Skill // 인간: 마검술
             bool isSpecial = judgeResult == Judgment.JudgeResult.Special;
             int damage = isSpecial ? 3 : 2;
             enemy.EnemyDamage(damage);
-            battleManager.UpdateEnemyHpBar();
             Debug.Log($"Swordsmanship used on {enemy}, dealing {damage} damage.");
         }
             
@@ -231,7 +227,6 @@ public class ThunderSpear : Skill // 오토마톤: 뇌창(썬더스피어)
         if (canAttack)
         {
             enemy.EnemyDamage(3);
-            battleManager.UpdateEnemyHpBar();
             Debug.Log($"Thunder Spear used on {enemy}, dealing 3 damage.");
 
             // 스킬 사용 후 현재 턴 저장
@@ -304,7 +299,6 @@ public class ClawStrike : Skill // 수인: 할퀴기
             }
             Debug.Log($"Claw Strike used on {enemy}, dealing {damage} damage.");
             // 피해를 주는 로직 추가
-            battleManager.UpdateEnemyHpBar();
         }
 
         Debug.Log("Fail");

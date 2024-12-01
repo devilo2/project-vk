@@ -82,6 +82,11 @@ public class UIManager : MonoBehaviour
         {
             SceneManager.LoadScene("Menu", LoadSceneMode.Additive);
         }
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            SceneManager.LoadScene("ending_credit");
+        }
     }
 
     // Plot 선택 처리

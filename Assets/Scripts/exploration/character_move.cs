@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class character_move : MonoBehaviour
 {
@@ -39,6 +40,9 @@ public class character_move : MonoBehaviour
         {
             speed_vec.x += speed;
             playerAnimator.Play("run");
+        }
+        if (Input.GetKeyDown(KeyCode.Tab)) {
+            SceneManager.LoadScene("Menu", LoadSceneMode.Additive);
         }
 
         //transform.Translate(speed_vec * Time.deltaTime);
