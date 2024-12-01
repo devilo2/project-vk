@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8497774350091897651}
   - component: {fileID: 7846117220095293720}
   - component: {fileID: 1005872049530322706}
+  - component: {fileID: -8328848195070606199}
   m_Layer: 5
   m_Name: Player
   m_TagString: Untagged
@@ -35,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -363.81, y: 94}
+  m_AnchoredPosition: {x: -482, y: 112.32}
   m_SizeDelta: {x: 727.6196, y: 495.6282}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8497774350091897651
@@ -97,3 +98,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-8328848195070606199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 646856581464047486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5253283b4229b94198cfc25d50c690e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

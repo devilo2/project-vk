@@ -10,9 +10,13 @@ public class Judgment_exit : MonoBehaviour
 {
     public Button button;
     public Button exitButton;
-
-    [SerializeField] private Judgment judgment;
-
+    PlayerData playerData = null;
+    Judgment judgment;
+    private void Start()
+    {
+        judgment = GameObject.Find("Judgement Manger").GetComponent<Judgment>();
+        playerData = GameObject.Find("PlayerManager").GetComponent<PlayerData>();
+    }
     private void Update()
     {
         if (button.interactable == false)
@@ -27,22 +31,14 @@ public class Judgment_exit : MonoBehaviour
     // Start is called before the first frame update
     public void ExitScene()
     {
-        PlayerData playerData = null;
-        try
-        {
-            playerData = GameObject.Find("PlayerManager").GetComponent<PlayerData>();
-        }
-        catch
-        {
 
-        }
 
         if (playerData != null)
         {
             playerData.Judgeresult = judgment.Result;
         }
         
-        Debug.Log(judgment.Result);    
+        Debug.Log(playerData.Judgeresult);    
         SceneManager.UnloadSceneAsync("judgment");
     }
 }

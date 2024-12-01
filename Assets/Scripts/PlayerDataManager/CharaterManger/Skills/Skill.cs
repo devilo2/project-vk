@@ -14,6 +14,7 @@ public class Skill
     public int Range { get; private set; } // 스킬의 사정거리
     public Image SkillImage { get; private set; } // 스킬의 이미지
     public PlayerData playerData;
+    public BattleManager battleManager;
 
     public Skill(string name, int cost, SkillType type, string designatedAttribute, int range)
     {
@@ -27,6 +28,7 @@ public class Skill
     public void InitializePlayerData()
     {
         playerData = GameObject.Find("PlayerManager").GetComponent<PlayerData>();
+        battleManager = GameObject.Find("BattleManger").GetComponent<BattleManager>();
     }
 
 
@@ -43,12 +45,16 @@ public class MeleeAttack : Skill // 공통: 접근전 공격(일반 공격)
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
-        if (judgeResult == Judgment.JudgeResult.Success && judgeResult == Judgment.JudgeResult.Special)
+        if (judgeResult == Judgment.JudgeResult.Success || judgeResult == Judgment.JudgeResult.Special)
         {
             enemy.EnemyDamage(1);
+            battleManager.UpdateEnemyHpBar();
             Debug.Log($"Dealing 1 damage to {enemy}");
         }
-        Debug.Log("Fail");
+        else {
+            Debug.Log("Fail"); 
+        }
+        
         
         // 여기서 target에 대해 1의 피해를 주는 로직을 추가
     }
@@ -71,7 +77,7 @@ public class DeviceDestructionBomb : Skill // 범용: 장치 파괴 폭탄
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
-        if (judgeResult == Judgment.JudgeResult.Success && judgeResult == Judgment.JudgeResult.Special)
+        if (judgeResult == Judgment.JudgeResult.Success || judgeResult == Judgment.JudgeResult.Special)
         {
             enemy.diceReduce += 3;
             Debug.Log($"Target {enemy} will have their action roll reduced by 3 next turn.");
@@ -88,17 +94,19 @@ public class EnergyEmitter : Skill // 범용: 에너지 방출포
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
-        if (judgeResult == Judgment.JudgeResult.Success && judgeResult == Judgment.JudgeResult.Special)
+        if (judgeResult == Judgment.JudgeResult.Success || judgeResult == Judgment.JudgeResult.Special)
         {
             if (enemy.Tag == "Giant")
             {
                 int damage = 3;
                 enemy.EnemyDamage(damage);
+                battleManager.UpdateEnemyHpBar();
                 Debug.Log($"Firing energy emitter at {enemy}, dealing {damage} damage.");
             }
             else
             {
                 enemy.EnemyDamage(1);
+                battleManager.UpdateEnemyHpBar();
                 Debug.Log($"Firing energy emitter at {enemy}, dealing 1 damage.");
             }
             Debug.Log("Fail");
@@ -114,7 +122,7 @@ public class SurvivalStrategy : Skill // 인간: 생존 전략
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
-        if (judgeResult == Judgment.JudgeResult.Success && judgeResult == Judgment.JudgeResult.Special)
+        if (judgeResult == Judgment.JudgeResult.Success || judgeResult == Judgment.JudgeResult.Special)
         {
             if (playerData.Health.Count == 1)
             {
@@ -135,9 +143,10 @@ public class MagicShield : Skill // 인간: 마술 방패
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
-        if (judgeResult == Judgment.JudgeResult.Success && judgeResult == Judgment.JudgeResult.Special)
+        if (judgeResult == Judgment.JudgeResult.Success || judgeResult == Judgment.JudgeResult.Special)
         {
             playerData.damageReduce += 1;
+
             Debug.Log("Magic Shield activated, reducing damage taken by 1 this turn.");
         }
             
@@ -151,11 +160,12 @@ public class Swordsmanship : Skill // 인간: 마검술
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
-        if (judgeResult == Judgment.JudgeResult.Success && judgeResult == Judgment.JudgeResult.Special)
+        if (judgeResult == Judgment.JudgeResult.Success || judgeResult == Judgment.JudgeResult.Special)
         {
             bool isSpecial = judgeResult == Judgment.JudgeResult.Special;
             int damage = isSpecial ? 3 : 2;
             enemy.EnemyDamage(damage);
+            battleManager.UpdateEnemyHpBar();
             Debug.Log($"Swordsmanship used on {enemy}, dealing {damage} damage.");
         }
             
@@ -169,7 +179,7 @@ public class TrajectoryCalculation : Skill // 오토마톤: 궤적 계산
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
-        if (judgeResult == Judgment.JudgeResult.Success && judgeResult == Judgment.JudgeResult.Special)
+        if (judgeResult == Judgment.JudgeResult.Success || judgeResult == Judgment.JudgeResult.Special)
         {
             Judgment judgment = GameObject.Find("Judgement Manger").GetComponent<Judgment>();
             judgment.diceReduce -= 4;
@@ -186,7 +196,7 @@ public class Overcharge : Skill // 오토마톤: 과충전
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
-        if (judgeResult == Judgment.JudgeResult.Success && judgeResult == Judgment.JudgeResult.Special)
+        if (judgeResult == Judgment.JudgeResult.Success || judgeResult == Judgment.JudgeResult.Special)
         {
             playerData.OverchargeUsed = true;
             playerData.RandomHeal(6);
@@ -221,6 +231,7 @@ public class ThunderSpear : Skill // 오토마톤: 뇌창(썬더스피어)
         if (canAttack)
         {
             enemy.EnemyDamage(3);
+            battleManager.UpdateEnemyHpBar();
             Debug.Log($"Thunder Spear used on {enemy}, dealing 3 damage.");
 
             // 스킬 사용 후 현재 턴 저장
@@ -282,7 +293,7 @@ public class ClawStrike : Skill // 수인: 할퀴기
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
-        if (judgeResult == Judgment.JudgeResult.Success && judgeResult == Judgment.JudgeResult.Special)
+        if (judgeResult == Judgment.JudgeResult.Success || judgeResult == Judgment.JudgeResult.Special)
         {
             bool isSpecial = /* 판정이 '스페셜'인 경우 */ false;
             int damage = 1;
@@ -293,6 +304,7 @@ public class ClawStrike : Skill // 수인: 할퀴기
             }
             Debug.Log($"Claw Strike used on {enemy}, dealing {damage} damage.");
             // 피해를 주는 로직 추가
+            battleManager.UpdateEnemyHpBar();
         }
 
         Debug.Log("Fail");

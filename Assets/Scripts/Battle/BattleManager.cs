@@ -14,6 +14,7 @@ public class BattleManager : MonoBehaviour
     public EnemySpawn enemySpawn; // EnemySpawner 인스턴스
     PlayerData playerData; //플레이어 데이터
     Judgment judgment;
+    playerAni playerAnimator;
 
 
     public delegate void BattleEndedHandler();
@@ -45,6 +46,7 @@ public class BattleManager : MonoBehaviour
     bool enterKey = false; //엔터키 중복입력 방지
     bool escKey = false; //esc키 중복입력 방지
     bool waitJudgment = false; //판정씬이 진행중인가
+
 
     //스킬, 도구, 다음턴 선택
     enum ToolOrSkill
@@ -79,6 +81,7 @@ public class BattleManager : MonoBehaviour
         //플레이어 데이터 초기화
         playerData = GameObject.Find("PlayerManager").GetComponent<PlayerData>();
         judgment = GameObject.Find("Judgement Manger").GetComponent<Judgment>();
+        
         curBattleStatus = BattleStatus.PlotSelect;
         waitJudgment = false;
         enterKey = false;
@@ -104,7 +107,7 @@ public class BattleManager : MonoBehaviour
         battleturn += 1;
         Enemy.deamgReduce = 0;
     }
- 
+
 
     // Update is called once per frame
     void Update()
@@ -142,6 +145,7 @@ public class BattleManager : MonoBehaviour
                 break;
             case BattleStatus.PlayerTurn:
                 PlayerTurn();
+                UpdateEnemyHpBar();
                 break;
             case BattleStatus.EnemyTurn:
                 EnemyTurn();
@@ -283,7 +287,7 @@ public class BattleManager : MonoBehaviour
                 // S키를 눌러서 다음 적 선택 (마지막 적이 아닐 경우)
                 if (Input.GetKeyDown(KeyCode.S) && SelectedEnemyNum < enemyMax - 1)
                 {
-                    SelectedEnemyNum++;
+                    SelectedEnemyNum++; 
                     Debug.Log($"BattleManager: cur enemy:{SelectedEnemyNum}");
                 }
                 break;
@@ -294,7 +298,6 @@ public class BattleManager : MonoBehaviour
                 if (Mathf.Abs(playerData.enemies[SelectedEnemyNum].plot - playerPlot) <= playerData.getSkill(skillNum).Range)
                 {
                     curPlayerTurnStatus = PlayerTurnStatus.Idle;
-                    UpdateEnemyHpBar();
                     break;
                 }
                 if (!waitJudgment)
@@ -405,7 +408,6 @@ public class BattleManager : MonoBehaviour
     {
         Debug.Log($"Using Skill at Index {skillIndex}");
         Skill selectedSkill = playerData.getSkill(skillIndex);
-
         // 스킬 효과 적용
         selectedSkill.UseSkill(playerData.enemies[SelectedEnemyNum], playerData.Judgeresult);
     }
@@ -444,7 +446,6 @@ public class BattleManager : MonoBehaviour
         {
             Slider currentEnemySlider = enemyHpSliders;
             Enemy selectedEnemy = playerData.enemies[SelectedEnemyNum];
-
             // 적의 현재 체력 비율로 슬라이더 값 업데이트
             currentEnemySlider.value = (float)selectedEnemy.HP;
         }

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2421523156171492526}
   - component: {fileID: 2798003648066317735}
   - component: {fileID: 2666707784240328171}
+  - component: {fileID: -5532920628874591859}
   m_Layer: 5
   m_Name: enemy
   m_TagString: Giant
@@ -35,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -29, y: 0}
+  m_AnchoredPosition: {x: 353, y: 112.32}
   m_SizeDelta: {x: 573.91, y: 568.9974}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2421523156171492526
@@ -97,3 +98,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-5532920628874591859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6327469635485286353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: affe949d4d468a244a468af7cf6b55f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
