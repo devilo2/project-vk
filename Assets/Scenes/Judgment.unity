@@ -727,6 +727,7 @@ MonoBehaviour:
   resultText: {fileID: 881483686}
   judgmentText: {fileID: 1375889974}
   judgment: {fileID: 1119887841}
+  button: {fileID: 1988818621}
 --- !u!114 &1119887841
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static BattleManager;
 using static Judgment;
 
@@ -64,7 +65,7 @@ public class Enemy
         {
             int dice = Random.Range(1, 13);
 
-            if (judgment.SetJudgeResult("격투", dice) >= Judgment.JudgeResult.Success)
+            if (judgment.SetJudgeResult("격투", dice) == Judgment.JudgeResult.Success || judgment.SetJudgeResult("격투", dice) == Judgment.JudgeResult.Special)
             {
                 playerData.Damaged(1);
                 Debug.Log("근접공격 성공");
@@ -81,7 +82,7 @@ public class Enemy
         {
             int dice = Random.Range(1, 13);
 
-            if (judgment.SetJudgeResult("사격", dice) >= Judgment.JudgeResult.Success)
+            if (judgment.SetJudgeResult("사격", dice) == Judgment.JudgeResult.Success || judgment.SetJudgeResult("사격", dice) >= Judgment.JudgeResult.Special)
             {
                 playerData.Damaged(2);
                 Debug.Log("사격공격 성공");
@@ -96,7 +97,7 @@ public class Enemy
         else if (Mathf.Abs(plot - playerPlot) == 3)
         {
             int dice = Random.Range(1, 13);
-            if (judgment.SetJudgeResult("방어마술", dice) >= Judgment.JudgeResult.Success)
+            if (judgment.SetJudgeResult("방어마술", dice) == Judgment.JudgeResult.Success || judgment.SetJudgeResult("방어마술", dice) == Judgment.JudgeResult.Special)
             {
                 deamgReduce += 1;
                 Debug.Log("마력경화 성공");
@@ -141,5 +142,6 @@ public class Enemy
     public void DieEvent()
     {
         Debug.Log($"{Name} 처치");
+        SceneManager.LoadScene("exploration");
     }
 }

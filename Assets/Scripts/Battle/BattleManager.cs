@@ -15,6 +15,7 @@ public class BattleManager : MonoBehaviour
     PlayerData playerData; //플레이어 데이터
     Judgment judgment;
 
+
     public delegate void BattleEndedHandler();
     public event BattleEndedHandler OnBattleEnded;
     public int playerPlot = 1; //플롯
@@ -320,7 +321,7 @@ public class BattleManager : MonoBehaviour
         yield return new WaitUntil(() => playerData.Judgeresult != Judgment.JudgeResult.None);
 
         //판정 후 결과에 따라 코스트 차감 및 스킬 사용
-        if (playerData.Judgeresult >= Judgment.JudgeResult.Success)
+        if (playerData.Judgeresult == Judgment.JudgeResult.Success || playerData.Judgeresult == Judgment.JudgeResult.Special)
         {
             curCost -= skill.Cost;
             skill.UseSkill(playerData.enemies[SelectedEnemyNum], playerData.Judgeresult); //스킬 사용
@@ -413,13 +414,17 @@ public class BattleManager : MonoBehaviour
         // 선택된 도구에 따라 동작
         Debug.Log($"Using Tool at Index {toolIndex}");
         // 도구의 효과를 구현
-        if (toolNum == 0)
+        if (toolIndex == 0)
         {
+            PlayerData playerData = GameObject.Find("PlayerManager").GetComponent<PlayerData>();
+            playerData.RandomHeal(1);
+            PlayerData.SelfRecoveryPowerCapsule -= 1;
 
         }
-        else if (toolNum == 1)
+        else if (toolIndex == 1)
         {
-
+            EnableEnergyAmplification();
+            PlayerData.EnableEnergy -= 1;
         }
     }
 
