@@ -9,6 +9,7 @@ public class itemInteract1 : MonoBehaviour
     public GameObject interactUI;
     private bool inArea = false;
     [SerializeField] private UnityEvent onInteract;
+    public int num = Random.Range(1, 4);
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +24,19 @@ public class itemInteract1 : MonoBehaviour
         {
             
             Debug.Log(gameObject.name + " interacted!");
-
+            if (num == 1)
+            {
+                PlayerData.EnableEnergy += 1;
+                
+            }
+            if (num == 2)
+            {
+                PlayerData.ReturningGear += 1;
+            }
+            if (num == 3)
+            {
+                PlayerData.SelfRecoveryPowerCapsule += 1;
+            }
 
             // StartCoroutine(Blink());
             onInteract.Invoke();

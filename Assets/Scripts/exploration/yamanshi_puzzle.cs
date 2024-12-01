@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 public class yamanshi_puzzle : MonoBehaviour
 {
     public GameObject puzzleUI;
     GameObject puzzle_Input;
     public GameObject puzzle_Fail_UI;
     public GameObject puzzle_Success_UI;
+    public GameObject puzzUI;
 
 
     bool isPuzzleActive = false;
@@ -33,6 +35,8 @@ public class yamanshi_puzzle : MonoBehaviour
                 if(input_text == "yamanashi") {
                     Puzzle_Success();
                     Puzzle_Disable();
+                    SceneManager.LoadScene("exploration 2");
+
                 }
                 else{
                     Puzzle_Fail();
@@ -55,12 +59,14 @@ public class yamanshi_puzzle : MonoBehaviour
         Time.timeScale = 0;
         puzzle_Input.GetComponent<InputField>().text = "";
         isPuzzleActive = true;
+        puzzUI.SetActive(true);
         puzzle_Input.SetActive(true);
     }
 
     public void Puzzle_Disable() {
         Time.timeScale = 1;
         isPuzzleActive = false;
+        puzzUI.SetActive(false);
         puzzle_Input.SetActive(false);
 
     }
