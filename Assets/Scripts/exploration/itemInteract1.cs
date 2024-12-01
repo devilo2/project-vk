@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
 public class itemInteract1 : MonoBehaviour
 {
     public GameObject interactUI;
     private bool inArea = false;
+    [SerializeField] private UnityEvent onInteract;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,13 +24,17 @@ public class itemInteract1 : MonoBehaviour
             
             Debug.Log(gameObject.name + " interacted!");
 
-            StartCoroutine(Blink());
+
+            // StartCoroutine(Blink());
+            onInteract.Invoke();
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        interactUI.SetActive(true);
+        if(interactUI != null) {
+            interactUI.SetActive(true);
+        }
         inArea = true;
     }
 
@@ -35,16 +42,12 @@ public class itemInteract1 : MonoBehaviour
     {
         
     }
-    IEnumerator Blink()
-    {
-        gameObject.GetComponent<SpriteRenderer>().enabled = false;
-        yield return new WaitForSeconds(2.0f);
-        gameObject.GetComponent<SpriteRenderer>().enabled = true;
-    }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        interactUI.SetActive(false);
+        if(interactUI != null) {
+            interactUI.SetActive(false);
+        }
         inArea = false;
     }
 
