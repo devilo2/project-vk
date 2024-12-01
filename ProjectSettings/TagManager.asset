@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Giant
+  - skill_select
+  - skill
+  - persona
+  - persona_select
   layers:
   - Default
   - TransparentFX
