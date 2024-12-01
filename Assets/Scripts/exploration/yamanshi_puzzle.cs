@@ -30,7 +30,7 @@ public class yamanshi_puzzle : MonoBehaviour
                 puzzle_Success_UI.SetActive(false);
 
                 string input_text = puzzle_Input.GetComponent<InputField>().text;
-                if(input_text == "yamanshi") {
+                if(input_text == "yamanashi") {
                     Puzzle_Success();
                     Puzzle_Disable();
                 }

@@ -11,17 +11,19 @@ public class BodyDice : MonoBehaviour
     [SerializeField] private Image diceImage2;  // 두 번째 주사위 이미지 UI (두 번째 주사위)
     [SerializeField] private Text resultText;   // 주사위 결과를 표시하는 텍스트 UI
     [SerializeField] private Text judgmentText; // 판정 결과를 표시하는 텍스트 UI
-    [SerializeField] private Judgment judgment; // 판정 로직을 담당하는 클래스 참조
+    Judgment judgment; // 판정 로직을 담당하는 클래스 참조
     public Button button;
     public static int dice = 0;  // 주사위 합산 결과 저장 변수
 
     private bool isRolling = false; // 주사위를 굴리는 중인지 여부를 확인하는 변수
 
     private void Start()
-    { 
+    {
+        judgment = GameObject.Find("Judgement Manger").GetComponent<Judgment>();
         // 주사위 이미지를 초기화 (UI에서 할당된 이미지 가져오기)
         diceImage1 = diceImage1.GetComponent<Image>();
         diceImage2 = diceImage2.GetComponent<Image>();
+
     }
 
     private void Update()
@@ -89,7 +91,6 @@ public class BodyDice : MonoBehaviour
 
         string statName = judgment.LastJudgeStatName; // 임의의 스탯 이름 (UI에서 입력 가능한 스탯 이름으로 변경 가능)
         Judge(statName, dice); // 판정을 위한 메서드 호출
-
         isRolling = false; // 주사위 굴리는 상태를 종료
     }
 

@@ -64,7 +64,7 @@ public class Judgment : MonoBehaviour
                 }
             }
 
-            Debug.Log(string.Format("GetJudgeNum: +{0} not Having Status", minDist));
+            Debug.Log(string.Format("GetJudgeNum{0}: +{1} not Having Status", name,  minDist));
 
             judgment_value = judgeNum + minDist; // 기본 판정 값에 거리만큼 더함
         }
