@@ -3,12 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - skill_select
-  - skill
-  - persona
-  - persona_select
-  - Giant
+  tags: []
   layers:
   - Default
   - TransparentFX
