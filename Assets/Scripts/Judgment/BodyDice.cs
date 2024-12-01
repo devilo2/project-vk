@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,7 @@ public class BodyDice : MonoBehaviour
     [SerializeField] private Text resultText;   // 주사위 결과를 표시하는 텍스트 UI
     [SerializeField] private Text judgmentText; // 판정 결과를 표시하는 텍스트 UI
     [SerializeField] private Judgment judgment; // 판정 로직을 담당하는 클래스 참조
+    public Button button;
     public static int dice = 0;  // 주사위 합산 결과 저장 변수
 
     private bool isRolling = false; // 주사위를 굴리는 중인지 여부를 확인하는 변수
@@ -20,6 +22,18 @@ public class BodyDice : MonoBehaviour
         // 주사위 이미지를 초기화 (UI에서 할당된 이미지 가져오기)
         diceImage1 = diceImage1.GetComponent<Image>();
         diceImage2 = diceImage2.GetComponent<Image>();
+    }
+
+    private void Update()
+    {
+        if (PlayerData.ReturningGear == 0)
+        {
+            button.interactable = false; // 버튼을 비활성화
+        }
+        else
+        {
+            button.interactable = true;
+        }
     }
 
     // UI 버튼을 클릭 시 호출되는 메서드
@@ -48,6 +62,7 @@ public class BodyDice : MonoBehaviour
     // 이전 스탯에 대해 다시 판정
     public void ReJudge()
     {
+        PlayerData.ReturningGear -= 1;
         RollDice(); // 주사위 다시 굴리기
     }
 

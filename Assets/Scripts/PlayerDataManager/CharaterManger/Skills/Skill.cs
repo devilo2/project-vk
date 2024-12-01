@@ -43,8 +43,13 @@ public class MeleeAttack : Skill // 공통: 접근전 공격(일반 공격)
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
-        enemy.EnemyDamage(1);
-        Debug.Log($"Dealing 1 damage to {enemy}");
+        if (judgeResult == Judgment.JudgeResult.Success && judgeResult == Judgment.JudgeResult.Special)
+        {
+            enemy.EnemyDamage(1);
+            Debug.Log($"Dealing 1 damage to {enemy}");
+        }
+        Debug.Log("Fail");
+        
         // 여기서 target에 대해 1의 피해를 주는 로직을 추가
     }
 }
@@ -66,22 +71,40 @@ public class DeviceDestructionBomb : Skill // 범용: 장치 파괴 폭탄
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
-        enemy.diceReduce += 3;
-        Debug.Log($"Target {enemy} will have their action roll reduced by 3 next turn.");
+        if (judgeResult == Judgment.JudgeResult.Success && judgeResult == Judgment.JudgeResult.Special)
+        {
+            enemy.diceReduce += 3;
+            Debug.Log($"Target {enemy} will have their action roll reduced by 3 next turn.");
+        }
+        Debug.Log("Fail");
+
         // 타겟의 행동 판정에 영향을 주는 로직 추가
         // 예를 들어, 행동 판정 값을 추적하는 시스템에서 값 감소 처리
     }
 }
 public class EnergyEmitter : Skill // 범용: 에너지 방출포
 {
-    public EnergyEmitter() : base("에너지 방출포", 2, SkillType.Attack, "사격", 3) { }
+    public EnergyEmitter() : base("에너지 방출포", 2, SkillType.Attack, "공격마술", 3) { }
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
-        bool isGiant = enemy.Tag == "Giant"; ; // "거대" 태그가 붙은 경우
-        int damage = isGiant ? 3 : 1;
-        enemy.EnemyDamage(damage);
-        Debug.Log($"Firing energy emitter at {enemy}, dealing {damage} damage.");
+        if (judgeResult == Judgment.JudgeResult.Success && judgeResult == Judgment.JudgeResult.Special)
+        {
+            if (enemy.Tag == "Giant")
+            {
+                int damage = 3;
+                enemy.EnemyDamage(damage);
+                Debug.Log($"Firing energy emitter at {enemy}, dealing {damage} damage.");
+            }
+            else
+            {
+                enemy.EnemyDamage(1);
+                Debug.Log($"Firing energy emitter at {enemy}, dealing 1 damage.");
+            }
+            Debug.Log("Fail");
+        }
+            
+        
         // 피해를 주는 로직 추가
     }
 }
@@ -91,11 +114,17 @@ public class SurvivalStrategy : Skill // 인간: 생존 전략
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
-        if(playerData.Health.Count == 1)
+        if (judgeResult == Judgment.JudgeResult.Success && judgeResult == Judgment.JudgeResult.Special)
         {
-            playerData.damagePass = true;
+            if (playerData.Health.Count == 1)
+            {
+                playerData.damagePass = true;
+            }
+            Debug.Log("Survival Strategy activated. If HP is reduced to 1, no damage will be taken this turn.");
+            
         }
-        Debug.Log("Survival Strategy activated. If HP is reduced to 1, no damage will be taken this turn.");
+        Debug.Log("Fail");
+
         // 체력 감소 시 데미지를 막는 로직 추가
         // 예를 들어, 캐릭터의 HP 상태를 추적하는 시스템에서 조건을 체크
     }
@@ -106,8 +135,13 @@ public class MagicShield : Skill // 인간: 마술 방패
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
-        playerData.damageReduce += 1;
-        Debug.Log("Magic Shield activated, reducing damage taken by 1 this turn.");
+        if (judgeResult == Judgment.JudgeResult.Success && judgeResult == Judgment.JudgeResult.Special)
+        {
+            playerData.damageReduce += 1;
+            Debug.Log("Magic Shield activated, reducing damage taken by 1 this turn.");
+        }
+            
+        Debug.Log("Fail");
         // 자신이 받는 피해를 감소시키는 로직 추가
     }
 }
@@ -117,10 +151,15 @@ public class Swordsmanship : Skill // 인간: 마검술
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
-        bool isSpecial = judgeResult == Judgment.JudgeResult.Special;
-        int damage = isSpecial ? 3 : 2;
-        enemy.EnemyDamage(damage);
-        Debug.Log($"Swordsmanship used on {enemy}, dealing {damage} damage.");
+        if (judgeResult == Judgment.JudgeResult.Success && judgeResult == Judgment.JudgeResult.Special)
+        {
+            bool isSpecial = judgeResult == Judgment.JudgeResult.Special;
+            int damage = isSpecial ? 3 : 2;
+            enemy.EnemyDamage(damage);
+            Debug.Log($"Swordsmanship used on {enemy}, dealing {damage} damage.");
+        }
+            
+        Debug.Log("Fail");
         // 스페셜 판정과 데미지 계산 로직 추가
     }
 }
@@ -130,9 +169,14 @@ public class TrajectoryCalculation : Skill // 오토마톤: 궤적 계산
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
-        Judgment judgment = GameObject.Find("Judgement Manger").GetComponent<Judgment>();
-        judgment.diceReduce -= 4;
-        Debug.Log("Trajectory Calculation activated, increasing the accuracy of ranged attacks by 4 this turn.");
+        if (judgeResult == Judgment.JudgeResult.Success && judgeResult == Judgment.JudgeResult.Special)
+        {
+            Judgment judgment = GameObject.Find("Judgement Manger").GetComponent<Judgment>();
+            judgment.diceReduce -= 4;
+            Debug.Log("Trajectory Calculation activated, increasing the accuracy of ranged attacks by 4 this turn.");
+        }
+            
+        Debug.Log("Fail");
         // 사격전 공격 스킬의 판정을 증가시키는 로직 추가
     }
 }
@@ -142,10 +186,15 @@ public class Overcharge : Skill // 오토마톤: 과충전
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
-        playerData.OverchargeUsed = true;
-        playerData.RandomHeal(6);
-        playerData.AddDebuff(new OverchargeEffect(100));
-        Debug.Log("Overcharge used, restoring HP to 6 but causing 2 HP loss every turn.");
+        if (judgeResult == Judgment.JudgeResult.Success && judgeResult == Judgment.JudgeResult.Special)
+        {
+            playerData.OverchargeUsed = true;
+            playerData.RandomHeal(6);
+            playerData.AddDebuff(new OverchargeEffect(100));
+            Debug.Log("Overcharge used, restoring HP to 6 but causing 2 HP loss every turn.");
+        }
+           
+        Debug.Log("Fail");
         // 체력 복구 및 매 턴 체력 감소 로직 추가
     }
 }
@@ -233,14 +282,19 @@ public class ClawStrike : Skill // 수인: 할퀴기
 
     public override void UseSkill(Enemy enemy, Judgment.JudgeResult judgeResult)
     {
-        bool isSpecial = /* 판정이 '스페셜'인 경우 */ false;
-        int damage = 1;
-        if (isSpecial)
+        if (judgeResult == Judgment.JudgeResult.Success && judgeResult == Judgment.JudgeResult.Special)
         {
-            Debug.Log("Special Claw Strike! Attacking again.");
-            // 두 번 공격하는 로직 추가
+            bool isSpecial = /* 판정이 '스페셜'인 경우 */ false;
+            int damage = 1;
+            if (isSpecial)
+            {
+                Debug.Log("Special Claw Strike! Attacking again.");
+                // 두 번 공격하는 로직 추가
+            }
+            Debug.Log($"Claw Strike used on {enemy}, dealing {damage} damage.");
+            // 피해를 주는 로직 추가
         }
-        Debug.Log($"Claw Strike used on {enemy}, dealing {damage} damage.");
-        // 피해를 주는 로직 추가
+
+        Debug.Log("Fail");
     }
 }

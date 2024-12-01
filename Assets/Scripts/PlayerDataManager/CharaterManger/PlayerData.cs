@@ -28,6 +28,12 @@ public class PlayerData : MonoBehaviour
     public const int STATUS_X_MAX = 6; // 스탯의 X 크기 (예: 스탯 맵의 가로 크기)Assets/Scripts/PlayerDataManager/CharaterManger/PlayerData.cs
     public const int STATUS_Y_MAX = 9; // 스탯의 Y 크기 (예: 스탯 맵의 세로 크기)
 
+    //도구
+    public static int EnableEnergy = 0;
+    public static int ReturningGear = 1;
+    public static int SelfRecoveryPowerCapsule = 0;
+
+
     public struct Status
     {
         public string name; // 스탯의 이름
@@ -245,8 +251,8 @@ public class PlayerData : MonoBehaviour
         sr.Close();
 
         // 테스트 코드: 임의의 스탯들을 가진 상태로 설정
-        havingStatuses.Add(SearchStatByName("사격"));
-        havingStatuses.Add(SearchStatByName("격투"));
+        havingStatuses.Add(SearchStatByName("공격마술"));
+        havingStatuses.Add(SearchStatByName("암호술"));
         havingStatuses.Add(SearchStatByName("검술"));
         havingStatuses.Add(SearchStatByName("방어마술"));
         havingStatuses.Add(SearchStatByName("잠입술"));
