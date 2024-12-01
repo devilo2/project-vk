@@ -52,6 +52,9 @@ public class PlayerData : MonoBehaviour
     // 가진 스탯 리스트
     public List<Status> havingStatuses = new List<Status>();
 
+    const int enemyMax = 1; //적 최대 수
+    public Enemy[] enemies = new Enemy[enemyMax];
+
     // 특정 좌표의 스탯을 가진 스탯 리스트에 추가
     public void AddStat(int x, int y)
     {
@@ -243,16 +246,23 @@ public class PlayerData : MonoBehaviour
 
         // 테스트 코드: 임의의 스탯들을 가진 상태로 설정
         havingStatuses.Add(SearchStatByName("사격"));
-        havingStatuses.Add(SearchStatByName("운전"));
+        havingStatuses.Add(SearchStatByName("격투"));
+        havingStatuses.Add(SearchStatByName("검술"));
+        havingStatuses.Add(SearchStatByName("방어마술"));
         havingStatuses.Add(SearchStatByName("잠입술"));
+        havingStatuses.Add(SearchStatByName("조사술"));
         availableStatuses = havingStatuses.ToList(); // 활성화된 스탯 리스트를 가진 스탯 리스트로 초기화
 
         //테스트 코드
         Skill meleeAttack = new MeleeAttack();
-        Skill testSkill2 = new Skill("테스트 스킬2", 4, Skill.SkillType.Support, "방어마술", 1);
+        Skill EnergyEmitter = new EnergyEmitter();
+        Skill Swordsmanship = new Swordsmanship();
+        Skill MagicShield = new MagicShield();
+        Skill DeviceDestructionBomb = new DeviceDestructionBomb();
 
+        skill = new Skill[] {meleeAttack, EnergyEmitter, Swordsmanship, MagicShield, DeviceDestructionBomb };
 
-        skill = new Skill[] {meleeAttack, testSkill2};
+        enemies[0] = new Enemy("고대골렘", 7);
     }
 
     public void AddDebuff(Debuff debuff)
