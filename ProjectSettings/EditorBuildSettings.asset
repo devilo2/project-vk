@@ -18,7 +18,19 @@ EditorBuildSettings:
     path: Assets/Scenes/Charater Select.unity
     guid: 59bcc8df2ba5e38428e81524280457da
   - enabled: 1
-    path: Assets/Scenes/exploration.unity
+    path: Assets/Scenes/exploration 1.unity
+    guid: 28961d6ea17ab65469bbc2593ac09a74
+  - enabled: 1
+    path: Assets/Scenes/exploration 2.unity
+    guid: 3d21cc9a4a1aa2246bf72ece38949c89
+  - enabled: 1
+    path: Assets/Scenes/exploration 3.unity
+    guid: 23a320e066b3e1942b41162637b0a3f4
+  - enabled: 1
+    path: Assets/Scenes/exploration 4.unity
+    guid: 087868e4b5136834f900eca824a9678e
+  - enabled: 1
+    path: Assets/Scenes/exploration 5.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
     path: Assets/Scenes/Judgment.unity
