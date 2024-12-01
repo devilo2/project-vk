@@ -8,7 +8,7 @@ public class change_to_exploration : MonoBehaviour
     // Start is called before the first frame update
     public void load_exploration()
     {
-        SceneManager.LoadScene("Exploration 2");
+        SceneManager.LoadScene("cutscene1");
     }
     void Start()
     {
