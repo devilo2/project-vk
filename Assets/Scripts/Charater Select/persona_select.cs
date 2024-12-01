@@ -19,8 +19,8 @@ public class persona_select : MonoBehaviour
             for (int i = 0; i < persona.Length; i++)
             {
                 select_persona[i].GetComponent<Button>().interactable = false;
-                next_select_btn.interactable = true;
             }
+            next_select_btn.interactable = true;
         }
         else
         {
